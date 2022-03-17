@@ -93,7 +93,7 @@ export default function Header() {
                         name="search"
                         ref={searchRef}
                         required
-                        placeholder="Cari Kursus"
+                        placeholder="Cari Teman"
                      />
                      <button
                         type="submit"
@@ -118,15 +118,6 @@ export default function Header() {
 
                </div>
                <div className="flex items-center justify-end mt-2.5 md:mt-0">
-                  <div className="flex items-center">
-                     <Link
-                        to="/kursus/baru"
-                        className="block link-scale pr-1 md:inline-block mr-4"
-                     >
-                        Berikan Kursus
-                     </Link>
-                  </div>
-
                   {userName ? (
                      <MyAccountButton />
                   ) : (

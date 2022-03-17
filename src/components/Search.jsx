@@ -46,7 +46,7 @@ const Search = () => {
             <input
                type="search"
                className="py-1 w-56 px-2.5 outline-none rounded-md dark-sidebar"
-               placeholder="Mau belajar apa?"
+               placeholder="Cari siapa?"
                required
                ref={searchRef}
             />
