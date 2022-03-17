@@ -11,7 +11,6 @@ export default function Login() {
   const dispatch = useDispatch();
   const email = useRef();
   const password = useRef();
-  const name = useRef();
   const [pending, setPending] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,7 +28,6 @@ export default function Login() {
             // "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            full_name: name.current.value,
             email: email.current.value,
             password: password.current.value,
           }),
@@ -62,7 +60,7 @@ export default function Login() {
 
   return (
     <div className="py-16">
-      <div className="form-card dark:bg-gray-800">
+      <div className="dark-nav w-full max-w-md p-10 m-auto rounded-2xl shadow-2xl">
         <h1 className="text-3xl font-semibold text-center text-gray-700 dark:text-white">
           Daftar Jagokan
         </h1>
@@ -77,28 +75,11 @@ export default function Login() {
             <input
               ref={email}
               type="email"
-              autoComplete="email"
               required
               className="mt-2 input-field"
             />
           </div>
-          <div className="mt-4">
-            <div className="flex items-center justify-between">
-              <label
-                htmlFor="userName"
-                className="block text-sm text-gray-800 dark:text-gray-200"
-              >
-                Nama Lengkap
-              </label>
-            </div>
-            <input
-              ref={name}
-              type="text"
-              required
-              autoComplete="username"
-              className="input-field mt-2"
-            />
-          </div>
+         
           <div className="mt-4">
             <div className="flex items-center justify-between">
               <label
@@ -112,7 +93,6 @@ export default function Login() {
               ref={password}
               required
               type="password"
-              autoComplete="current-password"
               className="input-field mt-2"
             />
           </div>

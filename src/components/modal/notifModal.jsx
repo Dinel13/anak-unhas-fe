@@ -50,13 +50,13 @@ export default function ErrorModal() {
                <div className="relative w-auto my-6 mx-auto py-5 max-w-3xl">
                   <div
                      style={{ minWidth: "300px", maxWidth: "380px" }}
-                     className="rounded-xl shadow-xl relative flex flex-col w-full bg-white outline-none focus:outline-none"
+                     className="rounded-xl shadow-xl relative flex flex-col w-full bg-d2 outline-none focus:outline-none"
                   >
-                     <div className="flex items-start justify-between p-5 bg-yellow-300 rounded-t-xl">
+                     <div className="flex items-start justify-between p-4 bg-red-900 rounded-t-xl">
                         <h3 className="text-2xl text-white font-semibold">{status}</h3>
                      </div>
                      <div className="relative p-5 flex-auto">
-                        <p className="my-3 text-gray-800 text-lg leading-relaxed">
+                        <p className="my-3 text-gray-200 text-lg leading-relaxed">
                            {message}
                         </p>
                      </div>

@@ -40,23 +40,20 @@ code {
   }
 
   .btn-ter {
-    @apply text-gray-900 bg-teal-50 focus:outline-none hover:bg-teal-100 rounded transition-colors duration-150;
-  }
-
-  .form-card {
-    @apply w-full max-w-md p-10 m-auto bg-gray-50 rounded-2xl shadow-2xl;
+    @apply text-white bg-d1 leading-relaxed focus:outline-none hover:bg-d3 rounded-full transition-colors duration-150;
   }
 
   .link-scale {
     @apply transform-gpu transition hover:scale-105 duration-150 ease-in-out;
   }
+
   .required:after {
     content: " *";
     color: red;
   }
 
   .input-field {
-    @apply w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-full focus:border-blue-500 focus:outline-none focus:ring;
+    @apply w-full px-4 py-2.5 text-gray-50 bg-d3 border border-gray-400 rounded-full focus:bg-d3 active:bg-d3 focus:border-blue-500 focus:outline-none focus:ring;
   }
 
   .text-title {
