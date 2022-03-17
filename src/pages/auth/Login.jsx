@@ -65,7 +65,7 @@ export default function Login() {
   const handleLogin = async (googleData) => {
     try {
       const res = await await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/user/outh/login`,
+        `${process.env.REACT_APP_SERVER_URL}/user/outh/login`,
         {
           method: "POST",
           body: JSON.stringify({

@@ -92,3 +92,11 @@ code {
     @apply text-gray-100 bg-transparent hover:bg-gray-700 focus:outline-none focus:ring;
   }
 }
+
+
+.chat-truncate {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
