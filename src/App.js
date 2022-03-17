@@ -57,7 +57,7 @@ function App() {
     <div className="font-pop dark-main">
       <Header />
       <NotifModal />
-      <main style={{ minHeight: "67vh" }}>
+      <main style={{ minHeight: "85vh" }}>
         <Suspense fallback={<Loading />}>{routes}</Suspense>
       </main>
       <Footer />

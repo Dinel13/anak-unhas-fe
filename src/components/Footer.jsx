@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export default function Footer() {
   return (
     <footer className="dark-nav">
-      <div className="container py-4 px-3 md:px-6 lg:px-10 flex items-center sm:flex-row flex-col">
+      <div className="container py-4 px-3 md:px-6 lg:px-10 flex items-center xs:flex-row flex-col">
         <Link to="/" className="text-xl font-semibold tracking-wider">
           ANAK-UNHAS
         </Link>
@@ -14,7 +14,7 @@ export default function Footer() {
             salahuddin
           </a>
         </p>
-        <span className="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-end">
+        <span className="inline-flex xs:ml-auto xs:mt-0 mt-4 justify-end">
           <a href="https://github.com/Dinel13" target="_blank" rel="noreferrer">
             <svg
               fill="currentColor"

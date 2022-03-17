@@ -62,9 +62,9 @@ export default function Header() {
          <div className="flex items-center justify-between flex-wrap py-2.5 px-3 md:px-6 lg:px-10 ">
             <Link
                to="/"
-               className="text-xl font-semibold tracking-wider"
+               className="sm:text-xl font-semibold tracking-wider"
             >
-               Anak-unhas
+               ANAK-UNHAS
             </Link>
             <div className="md:hidden m-0" onClick={clickMenu}>
                <button className="py-1 px-2 text-gray-600 hover:text-gray-800 hover:bg-yellow-200 rounded-md focus:outline-none">

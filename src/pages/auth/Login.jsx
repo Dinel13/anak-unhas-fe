@@ -138,7 +138,7 @@ export default function Login() {
               />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="absolute right-1.5 top-5 h-5 w-5"
+                className="absolute right-1.5 top-3 h-5 w-5"
                 viewBox="0 0 20 20"
                 fill="currentColor"
                 onClick={showPassword}
