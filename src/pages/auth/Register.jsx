@@ -9,6 +9,7 @@ import SubmitFull from "../../components/button/Submit.jsx";
 import { login as loginSlice } from "../../store/authSlice";
 import { showNotif } from "../../store/notifSlice";
 import google from "../../assets/g.png";
+import unhas from "../../assets/u.jpg";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -108,10 +109,14 @@ export default function Login() {
   };
 
   return (
-    <div className="py-16">
-      <div className="dark-nav w-full max-w-md p-10 m-auto rounded-2xl shadow-2xl">
+    <div className="relative">
+         <section className="opacity-40 w-full h-screen">
+        <img src={unhas} alt="unhas" className="object-cover w-full h-full" />
+      </section>
+      <div className="py-10 z-10 absolute inset-0">
+        <div className="dark-nav w-full max-w-sm p-8 m-auto rounded-2xl shadow-2xl backdrop-blur bg-black/30">
         <h1 className="text-3xl font-semibold text-center text-white">Daftar</h1>
-        <form className="mt-6" onSubmit={loginHandler}>
+        <form className="mt-4" onSubmit={loginHandler}>
           <div>
             <label htmlFor="email" className="block text-sm text-left">
               Email
@@ -197,6 +202,7 @@ export default function Login() {
             MASUK
           </button>
         </p>
+      </div>
       </div>
     </div>
   );

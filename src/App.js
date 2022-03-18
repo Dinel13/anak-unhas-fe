@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { Route, Routes, Navigate } from "react-router-dom";
 
 import { login, logout, selectToken, selectUserId } from "./store/authSlice";
-import Footer from "./components/Footer";
-import Header from "./components/header/Header";
+import Footer from "./components/layout/Footer";
+import Layout from "./components/layout";
 import Loading from "./components/loading/LoadingFull";
 import NotifModal from "./components/modal/notifModal";
 import Chat from "./components/Chat";
@@ -116,7 +116,7 @@ function App() {
 
   return (
     <div className="font-pop dark-main">
-      <Header />
+      <Layout />
       <NotifModal />
       <main style={{ minHeight: "85vh" }}>
         <Suspense fallback={<Loading />}>{routes}</Suspense>

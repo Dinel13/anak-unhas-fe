@@ -58,7 +58,7 @@ export default function Header() {
    };
 
    return (
-      <header className="text-gray-50 shadow-lg sticky top-0 w-full z-10 bg-gradient-to-r from-red-900 to-pink-900">
+      <header className="text-gray-50 shadow-lg sticky top-0 w-full z-20 bg-gradient-to-r from-red-900 to-pink-900">
          <div className="flex items-center justify-between flex-wrap py-2.5 px-3 md:px-6 lg:px-10 ">
             <Link
                to="/"
