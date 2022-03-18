@@ -3,7 +3,7 @@ import hero from "../../assets/hero.svg";
 
 export default function Hero() {
   return (
-    <section className="wrapper flex md:flex-row flex-col items-center">
+    <section className="wrapper flex md:flex-row flex-col items-center" style={{ minHeight: "92vh" }}>
       <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0">
         <img
           className="object-cover object-center rounded"

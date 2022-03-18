@@ -15,6 +15,7 @@ module.exports = {
         d2: "#3E2C41",
         d3: "#5C527F",
         d4: "#6E85B2",
+        d5: "#361C2C",
       },
     },
     screens: {

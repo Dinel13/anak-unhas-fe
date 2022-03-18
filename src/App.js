@@ -14,6 +14,7 @@ const Login = lazy(() => import("./pages/auth/Login"));
 const Signup = lazy(() => import("./pages/auth/Register"));
 const MyAccount = lazy(() => import("./pages/account/MyAccount"));
 const UpdateAccount = lazy(() => import("./pages/account/Update"));
+const ChatPage = lazy(() => import("./pages/Chat"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
@@ -95,6 +96,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/masuk" element={<Navigate to="/" />} />
         <Route path="/daftar" element={<Navigate to="/" />} />
+        <Route path="/chat" element={<ChatPage />} />
         <Route path="/akunku">
           <Route index element={<MyAccount />} />
           <Route path="update" element={<UpdateAccount />} />
@@ -109,6 +111,7 @@ function App() {
         <Route path="/masuk" element={<Login />} />
         <Route path="/daftar" element={<Signup />} />
         <Route path="/akunku" element={<Navigate to="/masuk" />} />
+        <Route path="/chat" element={<Navigate to="/masuk" />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     );
@@ -118,11 +121,11 @@ function App() {
     <div className="font-pop dark-main">
       <Layout />
       <NotifModal />
-      <main style={{ minHeight: "85vh" }}>
+      <main style={{ minHeight: "90vh" }}>
         <Suspense fallback={<Loading />}>{routes}</Suspense>
       </main>
-      <Chat />
-      <Footer />
+      {/* <Chat /> */}
+      {/* <Footer /> */}
     </div>
   );
 }
