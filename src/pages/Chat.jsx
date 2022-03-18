@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 import avatar from "../assets/avatar.svg";
-import { selectName } from "../store/authSlice";
+import { selectName, selectUserId } from "../store/authSlice";
 import Loading from "../components/loading/LoadingFull";
 
 const Friend = ({ friend, setPeople, people }) => {
@@ -147,8 +147,9 @@ const messageList = [
   },
 ];
 
-export default function Chat() {
+export default function Chat({ socket }) {
   const username = useSelector(selectName);
+  const userId = useSelector(selectUserId);
   const [people, setPeople] = useState(false);
   const [loading, setLoading] = useState(null);
   const [messages, setMessages] = useState(messageList);
@@ -157,9 +158,18 @@ export default function Chat() {
   const sendMessage = (e) => {
     e.preventDefault();
     const message = messageRef.current.value;
+    if (message) {
+      socket.send(
+        JSON.stringify({
+          body : message,
+          from: parseInt(userId),
+          to: parseInt(people.id),
+        })
+      );
+    }
     messageRef.current.value = "";
     messageRef.current.scrollIntoView({ behavior: "smooth" });
-    setMessages((prev) => [...prev, { from: "meg", message: message }]);
+    setMessages((prev) => [...prev, { id :32132, from: "meg", message: message }]);
   };
   return (
     <div className="flex">
@@ -199,9 +209,9 @@ export default function Chat() {
               messages && messages.length > 0 ? (
                 messages.map((item) => {
                   if (item.from === "me") {
-                    return <ChatMe message={item.message} />;
+                    return <ChatMe key={item.id} message={item.message} />;
                   } else {
-                    return <ChatOther message={item.message} />;
+                    return <ChatOther key={item.id} message={item.message} />;
                   }
                 })
               ) : (

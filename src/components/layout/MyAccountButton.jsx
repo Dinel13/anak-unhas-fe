@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../../store/authSlice";
 
-export default function MyAccountButton({ profile, setProfile }) {
+export default function MyAccountButton({ profile, setProfile, notif }) {
   const dispatch = useDispatch();
   return (
     <div className="ml-6 relative">
@@ -78,6 +78,7 @@ export default function MyAccountButton({ profile, setProfile }) {
           </div>
         )}
         <div className="py-0.5 px-1 btn-pri flex items-center rounded-full transform hover:shadow-xl hover:scale-105 transition duration-150 ease-in-out">
+          {notif && <p>{notif}</p>}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 mx-2"

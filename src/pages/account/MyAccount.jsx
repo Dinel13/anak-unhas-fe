@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout, selectUserId } from "../../store/authSlice";
 import { showNotif } from "../../store/notifSlice";
 import UpdatePhoto from "./UpdatePhoto.jsx";
+import Footer from "../../components/layout/Footer";
 
 export default function MyAccount() {
   const dispatch = useDispatch();
@@ -94,7 +95,8 @@ export default function MyAccount() {
                       },
                     })
                   }
-                  className="btn-sec py-2 px-4 m-2 tracking-wide leading-6" >
+                  className="btn-sec py-2 px-4 m-2 tracking-wide leading-6"
+                >
                   Update
                 </button>
                 <button
@@ -203,6 +205,7 @@ export default function MyAccount() {
           </>
         )}
       </section>
+      <Footer />
     </>
   );
 }

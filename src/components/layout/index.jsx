@@ -9,7 +9,7 @@ import Auth from "./AuthButton";
 import { selectName } from "../../store/authSlice";
 import { showNotif } from "../../store/notifSlice";
 
-export default function Navbar() {
+export default function Navbar({notif}) {
   const userName = useSelector(selectName);
   const [show, setShow] = useState(null);
   const [profile, setProfile] = useState(false);
@@ -94,7 +94,7 @@ export default function Navbar() {
               </div>
               <div className="flex items-center">
                 {userName ? (
-                  <MyAccount profile={profile} setProfile={setProfile} />
+                  <MyAccount profile={profile} setProfile={setProfile} notif={notif} />
                 ) : (
                   <Auth />
                 )}

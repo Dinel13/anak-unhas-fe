@@ -1,13 +1,11 @@
-import React, { lazy, Suspense, useCallback, useEffect } from "react";
+import React, { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Route, Routes, Navigate } from "react-router-dom";
 
 import { login, logout, selectToken, selectUserId } from "./store/authSlice";
-import Footer from "./components/layout/Footer";
 import Layout from "./components/layout";
 import Loading from "./components/loading/LoadingFull";
 import NotifModal from "./components/modal/notifModal";
-import Chat from "./components/Chat";
 
 const Home = lazy(() => import("./pages/home/Home"));
 const Login = lazy(() => import("./pages/auth/Login"));
@@ -21,6 +19,8 @@ function App() {
   const dispatch = useDispatch();
   const token = useSelector(selectToken);
   const userId = useSelector(selectUserId);
+  const [socket, setSocket] = useState(null);
+  const [notif, setNotif] = useState(null);
 
   const verifyToken = useCallback(
     async (token) => {
@@ -54,7 +54,7 @@ function App() {
 
   const connectSocket = useCallback((userId) => {
     const socket = new WebSocket(
-      `${process.env.REACT_APP_SERVER_WS}/ws/notif/${userId}`
+      `${process.env.REACT_APP_SERVER_WS}/ws/${userId}`
     );
     socket.onopen = () => {
       console.log("connected notif server");
@@ -62,15 +62,12 @@ function App() {
 
     socket.onmessage = (e) => {
       const data = JSON.parse(e.data);
-      console.log("data", data);
-      if (data.component === "chat") {
-        console.log("chat", data);
-      } else {
-        console.log("not know data", data);
+      if (data.type === "Notif") {
+        setNotif(data.notif);
       }
     };
 
-    return socket;
+    setSocket(socket);
   }, []);
 
   useEffect(() => {
@@ -80,14 +77,13 @@ function App() {
       dispatch(login({ token, id, name}));
       verifyToken(token); // logut if token not valid
     }
-    let socket;
-    if (userId) {
-      socket = connectSocket(userId);
+    if (userId && !socket) {
+      connectSocket(userId)
     }
     return () => {
       socket && socket.close();
     };
-  }, [dispatch, verifyToken, userId, connectSocket]);
+  }, [dispatch, verifyToken, userId, connectSocket, socket]);
 
   let routes;
   if (token) {
@@ -96,7 +92,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/masuk" element={<Navigate to="/" />} />
         <Route path="/daftar" element={<Navigate to="/" />} />
-        <Route path="/chat" element={<ChatPage />} />
+        <Route path="/chat" element={<ChatPage socket={socket} />} />
         <Route path="/akunku">
           <Route index element={<MyAccount />} />
           <Route path="update" element={<UpdateAccount />} />
@@ -119,13 +115,11 @@ function App() {
 
   return (
     <div className="font-pop dark-main">
-      <Layout />
+      <Layout notif={notif}/>
       <NotifModal />
       <main style={{ minHeight: "90vh" }}>
         <Suspense fallback={<Loading />}>{routes}</Suspense>
       </main>
-      {/* <Chat /> */}
-      {/* <Footer /> */}
     </div>
   );
 }
