@@ -160,7 +160,7 @@ export default function UserDetail() {
                 </div>
               </dl>
             </div>
-          </>
+           </>
         )}
       </section>
       <Footer />

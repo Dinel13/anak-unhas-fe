@@ -5,7 +5,7 @@ import PendingButton from "../../components/button/Pending.jsx";
 import { selectToken, selectUserId } from "../../store/authSlice";
 import { showNotif } from "../../store/notifSlice";
 
-export default function UpdatePhoto({ cancel }) {
+export default function UpdatePhoto({ cancel, setImage }) {
   const imageRef = useRef(null);
   const [pending, setPending] = useState(false);
   const token = useSelector(selectToken);
@@ -35,6 +35,7 @@ export default function UpdatePhoto({ cancel }) {
       if (!result.ok) {
         throw new Error(data.message || "gagal mengupload photo");
       }
+      setImage(data.user);
       dispatch(
         showNotif({
           status: "Success",
@@ -60,16 +61,16 @@ export default function UpdatePhoto({ cancel }) {
     <>
       <div className="opacity-20 fixed inset-0 z-40 bg-black"></div>
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-        <div className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-lg ">
+        <div className="max-w-md mx-auto dar rounded-lg overflow-hidden md:max-w-lg dark-nav">
           <div className="md:flex">
             <div className="w-full">
-              <div className="p-4 border-b-2">
-                <span className="px-3 text-lg font-bold text-gray-600">
+              <div className="p-4 bg-red-900">
+                <span className="px-3 text-lg font-bold text-gray-100">
                   Upload Photo
                 </span>
               </div>
               <form onSubmit={handleSubmit} className="p-4 mt-2">
-                <label className="inline-flex items-center btn-las w-full py-2 px-3">
+                <label className="inline-flex items-center btn-sec bg-d3 w-full py-2 px-3">
                   <input
                     ref={imageRef}
                     type="file"
@@ -79,8 +80,8 @@ export default function UpdatePhoto({ cancel }) {
                     // hidden untuk menghilangkan nama file yang diupload
                   />
                 </label>
-                <small className="block text-gray-600">
-                  Ukuran maksimal: 1mb
+                <small className="block text-gray-400">
+                  Ukuran maksimal: 2mb
                 </small>
                 <div className="flex mt-6 text-center pb-3">
                   {pending ? (
@@ -88,16 +89,16 @@ export default function UpdatePhoto({ cancel }) {
                   ) : (
                     <>
                       <button
-                        className="w-full btn-ter h-12 text-lg"
+                        onClick={cancel}
+                        className="w-full btn-sec mr-3 py-2"
+                      >
+                        batal
+                      </button>
+                      <button
+                        className="w-full btn-ter py-2"
                         type="submit"
                       >
                         Upload
-                      </button>
-                      <button
-                        onClick={cancel}
-                        className="w-full btn-sec h-12 text-lg ml-4"
-                      >
-                        batal
                       </button>
                     </>
                   )}
