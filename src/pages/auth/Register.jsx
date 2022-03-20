@@ -13,6 +13,7 @@ import unhas from "../../assets/u.jpg";
 
 export default function Login() {
   const dispatch = useDispatch();
+  const name = useRef();
   const email = useRef();
   const password = useRef();
   const [pending, setPending] = useState(null);
@@ -26,10 +27,11 @@ export default function Login() {
     setPending(true);
     try {
       const response = await await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/user/login`,
+        `${process.env.REACT_APP_SERVER_URL}/user/`,
         {
           method: "POST",
           body: JSON.stringify({
+            name : name.current.value,
             email: email.current.value,
             password: password.current.value,
           }),
@@ -118,6 +120,17 @@ export default function Login() {
         <h1 className="text-3xl font-semibold text-center text-white">Daftar</h1>
         <form className="mt-4" onSubmit={loginHandler}>
           <div>
+            <label htmlFor="Name" className="block text-sm text-left">
+              Nama Lengkap
+            </label>
+            <input
+              ref={name}
+              type="text"
+              required
+              className="input-field mt-2"
+            />
+          </div>
+          <div className="mt-4">
             <label htmlFor="email" className="block text-sm text-left">
               Email
             </label>

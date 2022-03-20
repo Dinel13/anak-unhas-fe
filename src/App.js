@@ -12,6 +12,7 @@ const Login = lazy(() => import("./pages/auth/Login"));
 const Signup = lazy(() => import("./pages/auth/Register"));
 const MyAccount = lazy(() => import("./pages/account/MyAccount"));
 const UpdateAccount = lazy(() => import("./pages/account/Update"));
+const Pencarian = lazy(() => import("./pages/Pencarian"));
 const ChatPage = lazy(() => import("./pages/Chat"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -92,6 +93,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/masuk" element={<Navigate to="/" />} />
         <Route path="/daftar" element={<Navigate to="/" />} />
+        <Route path="/pencarian" element={<Pencarian />} />
         <Route path="/chat" element={<ChatPage socket={socket} />} />
         <Route path="/akunku">
           <Route index element={<MyAccount />} />
@@ -106,6 +108,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/masuk" element={<Login />} />
         <Route path="/daftar" element={<Signup />} />
+        <Route path="/pencarian" element={<Pencarian />} />
         <Route path="/akunku" element={<Navigate to="/masuk" />} />
         <Route path="/chat" element={<Navigate to="/masuk" />} />
         <Route path="*" element={<NotFound />} />

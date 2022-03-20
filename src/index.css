@@ -37,7 +37,7 @@ code {
   }
 
   .btn-sec {
-    @apply text-teal-700 bg-transparent border border-teal-500 focus:outline-none hover:bg-teal-100 rounded transition-colors duration-150;
+    @apply text-gray-200 bg-transparent border border-gray-500 focus:outline-none hover:bg-d3 rounded-full transition-colors duration-150;
   }
 
   .btn-ter {
