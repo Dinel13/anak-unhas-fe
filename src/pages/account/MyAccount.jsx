@@ -161,12 +161,12 @@ export default function MyAccount() {
                     {user.address}
                   </dd>
                 </div>
-                <div className="px-4 py-5 sm:grid xs:grid-cols-3 md:grid-cols-4 sm:gap-4 sm:px-6">
+                {/* <div className="px-4 py-5 sm:grid xs:grid-cols-3 md:grid-cols-4 sm:gap-4 sm:px-6">
                   <dt className="text-sm text-gray-300">Instagram</dt>
                   <dd className="mt-1 text-sm font-semibold sm:mt-0 xs:col-span-2 md:col-span-3">
                     {user.ig}
                   </dd>
-                </div>
+                </div> */}
                 <div className="px-4 py-5 sm:grid xs:grid-cols-3 md:grid-cols-4 sm:gap-4 sm:px-6">
                   <dt className="text-sm text-gray-300">Minat dan Bakat</dt>
                   <dd className="mt-1 text-sm font-semibold sm:mt-0 xs:col-span-2 md:col-span-3">
