@@ -14,6 +14,7 @@ const MyAccount = lazy(() => import("./pages/account/MyAccount"));
 const UpdateAccount = lazy(() => import("./pages/account/Update"));
 const Pencarian = lazy(() => import("./pages/Pencarian"));
 const ChatPage = lazy(() => import("./pages/Chat"));
+const UserDetail = lazy(() => import("./pages/UserDetail"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
@@ -99,6 +100,7 @@ function App() {
           <Route index element={<MyAccount />} />
           <Route path="update" element={<UpdateAccount />} />
         </Route>
+        <Route path="/user/:id" element={<UserDetail />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     );
@@ -111,6 +113,7 @@ function App() {
         <Route path="/pencarian" element={<Pencarian />} />
         <Route path="/akunku" element={<Navigate to="/masuk" />} />
         <Route path="/chat" element={<Navigate to="/masuk" />} />
+        <Route path="/user/:id" element={<UserDetail />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     );

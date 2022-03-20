@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch} from "react-redux";
 
-import { logout, selectUserId } from "../../store/authSlice";
 import { showNotif } from "../../store/notifSlice";
 import UpdatePhoto from "./UpdatePhoto.jsx";
 import Footer from "../../components/layout/Footer";
@@ -10,7 +9,7 @@ import Footer from "../../components/layout/Footer";
 export default function MyAccount() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const id = useSelector(selectUserId);
+  const {id} = useParams()
   const [user, setUser] = useState(null);
   const [isEditPhoto, setIsEditPhoto] = useState(false);
 
@@ -100,10 +99,7 @@ export default function MyAccount() {
                   Update
                 </button>
                 <button
-                  onClick={() => {
-                    dispatch(logout());
-                    navigate("/");
-                  }}
+                  onClick={() => {}}
                   className="btn-las py-2 px-4 m-2 tracking-wide leading-6"
                 >
                   Logout

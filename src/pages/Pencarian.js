@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useLocation } from "react-router";
 import CardUser from "../components/User/Card";
 import { showNotif } from "../store/notifSlice";
+import Footer from "../components/layout/Footer";
 
 const Fakultas = [
   {
@@ -299,7 +300,7 @@ const Filter = ({ setData }) => {
               //   className="block input-field my-0 px-2 py-2.5"
               placeholder="Teknik"
               onChange={(e) => {
-                Fakultas.map((item) => {
+                Fakultas.forEach((item) => {
                   if (item.nama === e.target.value) {
                     setJurusanList(item.jurusan);
                   }
@@ -365,7 +366,7 @@ function Pencarian() {
 
   useEffect(() => {
     if (state && state.data) {
-       console.log(state.data);
+      console.log(state.data);
       setData(state.data.users);
       setTotal(state.data.total);
     }
@@ -373,14 +374,17 @@ function Pencarian() {
 
   console.log(total, data);
   return (
-    <section className="container my-0 mx-auto px-1 sm:px-2 md:px-3 lg:px-4 xl:px-6 2xl:px-8 py-4 md:py-6 lg:py-8 xl:py-10 2xl:py-12">
-      <Filter setData={setData} />
-      <div className="flex flex-wrap mt-4">
-      {data &&
-        data.length > 0 &&
-        data.map((item) => <CardUser key={item.id} data={item} />)}
+    <>
+      <section className="container my-0 mx-auto px-1 sm:px-2 md:px-3 lg:px-4 xl:px-6 2xl:px-8 py-4 md:py-6 lg:py-8 xl:py-10 2xl:py-12">
+        <Filter setData={setData} />
+        <div className="flex flex-wrap mt-4">
+          {data &&
+            data.length > 0 &&
+            data.map((item) => <CardUser key={item.id} data={item} />)}
         </div>
-    </section>
+      </section>
+      <Footer />
+    </>
   );
 }
 
