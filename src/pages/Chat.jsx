@@ -1,10 +1,11 @@
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import avatar from "../assets/avatar.svg";
 import { selectName, selectUserId } from "../store/authSlice";
 import Loading from "../components/loading/LoadingFull";
+import { showNotif } from "../store/notifSlice";
 
 const Friend = ({ friend, setPeople, people }) => {
   return (
@@ -19,7 +20,9 @@ const Friend = ({ friend, setPeople, people }) => {
       <img src={avatar} alt="avatar" className="w-14" />
       <div className="ml-2 flex-grow flex flex-col items-start h-full">
         <div className="text-xl font-bold">{friend.name}</div>
-        <p className="text-sm text-gray-300 chat-truncate">{friend.message}</p>
+        <p className="text-sm text-gray-300 chat-truncate">
+          {friend.last_message}
+        </p>
       </div>
     </div>
   );
@@ -45,131 +48,136 @@ const ChatOther = ({ message }) => {
   );
 };
 
-const friendList = [
-  {
-    id: 1,
-    name: "salahuddin",
-    message: "Dsadsad dasdsadsa dsa",
-  },
-  {
-    id: 2,
-    name: "salan",
-    message: "Dsadsad dasdsadsa dsa",
-  },
-  {
-    id: 3,
-    name: "sauddin",
-    message: "Dsadsad dasdsadsa dsa",
-  },
-  {
-    id: 43,
-    name: "huddin",
-    message: "Dsadsad dasdsadsa dsa",
-  },
-  {
-    id: 13,
-    name: "salahuddin",
-    message: "Dsadsad dasdsadsa dsa",
-  },
-  {
-    id: 22,
-    name: "salan",
-    message: "Dsadsad dasdsadsa dsa",
-  },
-  {
-    id: 37,
-    name: "sauddin",
-    message: "Dsadsad dasdsadsa dsa",
-  },
-  {
-    id: 74,
-    name: "huddin",
-    message: "Dsadsad dasdsadsa dsa",
-  },
-];
-
-const messageList = [
-  {
-    id: 1,
-    message: "Hi dsadsa sad sad sad sad sad sad sadsa dsad ",
-    from: "me",
-  },
-  {
-    id: 2,
-    message: "Hi dasd sadas dasd asdas dasd asdas dasd asdsa das dsada",
-    from: "meg",
-  },
-  {
-    id: 3,
-    message: "Hi",
-    from: "me",
-  },
-  {
-    id: 31,
-    message: "Hi dsadsa sad sad sad sad sad sad sadsa dsad ",
-    from: "me",
-  },
-  {
-    id: 23,
-    message: "Hi dasd sadas dasd asdas dasd asdas dasd asdsa das dsada",
-    from: "meg",
-  },
-
-  {
-    id: 33,
-    message: "Hi",
-    from: "me",
-  },
-  {
-    id: 4,
-    message: "Hi",
-    from: "me",
-  },
-  {
-    id: 5,
-    message: "Hi",
-    from: "meg",
-  },
-  {
-    id: 6,
-    message: "Hi",
-    from: "meg",
-  },
-  {
-    id: 7,
-    message: "Hi",
-    from: "meg",
-  },
-  {
-    id: 8,
-    message: "Hi",
-    from: "meg",
-  },
-];
-
 export default function Chat({ socket }) {
   const username = useSelector(selectName);
   const userId = useSelector(selectUserId);
-  const [people, setPeople] = useState(false);
-  const [loading, setLoading] = useState(null);
-  const [messages, setMessages] = useState(messageList);
+  const [people, setPeople] = useState(false); // current show friend or chat
+  const [ldFriend, setLdFriend] = useState(null);
+  const [ldRead, setLdRead] = useState(null);
+  const [ldUnrd, setLdUnrd] = useState(null);
+  const [friends, setFriends] = useState([
+    { id: 3, name: "dsad", message: "dsadsad" },
+  ]); // list of friends
+  const [messages, setMessages] = useState(null);
   const messageRef = useRef(null);
+  const dispatch = useDispatch();
+
+  socket.onmessage = (e) => {
+    const data = JSON.parse(e.data);
+    console.log(data);
+    if (data.type !== "Notif") {
+      setMessages((messages) => [...messages, data]);
+    }
+  };
+
+  useEffect(() => {
+    const getAllFriends = async () => {
+      try {
+        setLdFriend(true);
+        const response = await fetch(
+          `${process.env.REACT_APP_SERVER_URL}/chat/friends/${userId}`
+        );
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message);
+        }
+        setFriends(data.friends);
+      } catch (error) {
+        console.log(error);
+        dispatch(
+          showNotif({
+            type: "Error",
+            message: "Gagal mengambil data teman",
+            action: null,
+          })
+        );
+      } finally {
+        setLdFriend(false);
+      }
+    };
+    userId && getAllFriends();
+  }, [userId, dispatch]);
+
+  const getUnreadChat = useCallback(
+    async (friendId) => {
+      try {
+        setLdUnrd(true);
+        const response = await fetch(
+          `${process.env.REACT_APP_SERVER_URL}/chat/unreads/${userId}/${friendId}`
+        );
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message);
+        }
+        setMessages(data.messages);
+      } catch (error) {
+        console.log(error);
+        dispatch(
+          showNotif({
+            type: "Error",
+            message: "Gagal mengambil data teman",
+            action: null,
+          })
+        );
+      } finally {
+        setLdUnrd(false);
+      }
+    },
+    [dispatch, userId]
+  );
+  const getReadChat = useCallback(
+    async (friendId) => {
+      try {
+        setLdRead(true);
+        const response = await fetch(
+          `${process.env.REACT_APP_SERVER_URL}/chat/reads/${userId}/${friendId}`
+        );
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message);
+        }
+        setMessages((prev) => [...prev, ...data.messages]);
+      } catch (error) {
+        console.log(error);
+        dispatch(
+          showNotif({
+            type: "Error",
+            message: "Gagal mengambil data teman",
+            action: null,
+          })
+        );
+      } finally {
+        setLdRead(false);
+      }
+    },
+    [dispatch, userId]
+  );
+
+  useEffect(() => {
+    if (people) {
+      getUnreadChat(people.friend);
+    }
+  }, [people, getUnreadChat]);
 
   const sendMessage = (e) => {
     e.preventDefault();
     const message = messageRef.current.value;
+    console.log(userId, people.friend, message);
     if (message) {
       socket.send(
         JSON.stringify({
-          body : message,
+          body: message,
           from: parseInt(userId),
-          to: parseInt(people.id),
+          to: parseInt(people.friend),
         })
       );
     }
     messageRef.current.value = "";
     messageRef.current.scrollIntoView({ behavior: "smooth" });
-    setMessages((prev) => [...prev, { id :32132, from: "meg", message: message }]);
+    setMessages((prev) => [
+      ...prev,
+      { id: 32132, from: userId, body: message },
+    ]);
   };
   return (
     <div className="flex">
@@ -182,17 +190,21 @@ export default function Chat({ socket }) {
           className="overflow-y-auto overflow-x-hidden"
           style={{ height: "82vh" }}
         >
-          {friendList && friendList.length > 0 ? (
-            friendList.map((item) => (
-              <Friend
-                key={item.id}
-                friend={item}
-                setPeople={setPeople}
-                people={people}
-              />
-            ))
+          {!ldFriend ? (
+            friends && friends.length > 0 ? (
+              friends.map((item) => (
+                <Friend
+                  key={item.friend}
+                  friend={item}
+                  setPeople={setPeople}
+                  people={people}
+                />
+              ))
+            ) : (
+              <p>tidak ada</p>
+            )
           ) : (
-            <p>tidak ada</p>
+            <Loading />
           )}
         </div>
       </div>
@@ -205,13 +217,13 @@ export default function Chat({ socket }) {
           style={{ height: "82vh" }}
         >
           <ul className="space-y-2">
-            {!loading ? (
+            {!ldUnrd ? (
               messages && messages.length > 0 ? (
-                messages.map((item) => {
-                  if (item.from === "me") {
-                    return <ChatMe key={item.id} message={item.message} />;
+                messages.map((item, index) => {
+                  if (item.from == userId) {
+                    return <ChatMe key={index} message={item.body} />;
                   } else {
-                    return <ChatOther key={item.id} message={item.message} />;
+                    return <ChatOther key={index} message={item.body} />;
                   }
                 })
               ) : (

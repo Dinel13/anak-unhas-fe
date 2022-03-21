@@ -12,7 +12,7 @@ export default function SideNav({ show, setShow, name }) {
       className={
         show
           ? "w-full h-full fixed z-40 transform translate-x-0 bottom-0 left-0 duration-150"
-          : "w-full h-full absolute z-40 transform -translate-x-full duration-150"
+          : "w-full h-full absolute z-40 transform -translate-x-full bottom-0 left-0 duration-150"
       }
     >
       {/* outside the side nav */}

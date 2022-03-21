@@ -6,6 +6,7 @@ import { login, logout, selectToken, selectUserId } from "./store/authSlice";
 import Layout from "./components/layout";
 import Loading from "./components/loading/LoadingFull";
 import NotifModal from "./components/modal/notifModal";
+import Chat from "./components/Chat";
 
 const Home = lazy(() => import("./pages/home/Home"));
 const Login = lazy(() => import("./pages/auth/Login"));
@@ -53,7 +54,6 @@ function App() {
     [dispatch]
   );
 
-
   const connectSocket = useCallback((userId) => {
     const socket = new WebSocket(
       `${process.env.REACT_APP_SERVER_WS}/ws/${userId}`
@@ -64,6 +64,7 @@ function App() {
 
     socket.onmessage = (e) => {
       const data = JSON.parse(e.data);
+      console.log(data);
       if (data.type === "Notif") {
         setNotif(data.notif);
       }
@@ -76,11 +77,11 @@ function App() {
     if (localStorage.getItem("jdsaudsau@23")) {
       const data = JSON.parse(localStorage.getItem("jdsaudsau@23"));
       const [token, id, name] = data.split("9gTe1Sku");
-      dispatch(login({ token, id, name}));
+      dispatch(login({ token, id, name }));
       verifyToken(token); // logut if token not valid
     }
     if (userId && !socket) {
-      connectSocket(userId)
+      connectSocket(userId);
     }
     return () => {
       socket && socket.close();
@@ -121,11 +122,12 @@ function App() {
 
   return (
     <div className="font-pop dark-main">
-      <Layout notif={notif}/>
+      <Layout notif={notif} />
       <NotifModal />
       <main style={{ minHeight: "90vh" }}>
         <Suspense fallback={<Loading />}>{routes}</Suspense>
       </main>
+      {/* <Chat socket={socket} /> */}
     </div>
   );
 }

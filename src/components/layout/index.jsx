@@ -105,7 +105,7 @@ export default function Navbar({ notif }) {
 
       {/* SMALL SCREEN NAV */}
       <header className="block xs:hidden text-gray-50 shadow-lg sticky top-0 w-full z-20 bg-gradient-to-r from-red-900 to-pink-900">
-        <div className="flex items-center justify-between py-2 px-4">
+        <div className="flex items-center justify-between py-1 px-4">
           <div className="flex items-center">
             <div
               className="p-2 cursor-pointer -ml-2"

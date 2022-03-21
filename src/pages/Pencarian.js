@@ -214,13 +214,16 @@ const Filter = ({ setData }) => {
       const result = await fetch(
         `${process.env.REACT_APP_SERVER_URL}/users/filter`,
         {
-          method: "GET",
-          headers: {},
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+           },
           body: JSON.stringify({
             nama: namaRef.current.value,
-            angkatan: angkatanRef.current.value,
-            pendidikan: jurusanRef.current.value,
-            univ: fakultasRef.current.value,
+            angkatan: angkatanRef.current.value+"",
+            jurusan: jurusanRef.current.value,
+            fakultas: fakultasRef.current.value,
+            page : 1,
           }),
         }
       );
@@ -295,7 +298,6 @@ const Filter = ({ setData }) => {
             <input
               list="fakultases"
               ref={fakultasRef}
-              required
               className="p-2.5 flex-1 bg-gray-300 outline-none rounded-md shadow-lg focus:ring focus:ring-d4 text-gray-700"
               //   className="block input-field my-0 px-2 py-2.5"
               placeholder="Teknik"
@@ -323,7 +325,6 @@ const Filter = ({ setData }) => {
             <input
               list="jurusans"
               ref={jurusanRef}
-              required
               className="p-2.5 flex-1 bg-gray-300 outline-none rounded-md shadow-lg focus:ring focus:ring-d4 text-gray-700"
               //   className="block input-field my-0 px-2 py-2.5"
               placeholder="Teknik Informatika"
