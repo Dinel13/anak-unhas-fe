@@ -33,7 +33,7 @@ export default function Card({ data }) {
             <button
               onClick={() =>
                 navigate("/chat", {
-                  state: { userId: data.id },
+                  state: { user: data },
                 })
               }
               className="btn-pri py-1 px-5 text-sm"

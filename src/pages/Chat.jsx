@@ -6,8 +6,10 @@ import avatar from "../assets/avatar.svg";
 import { selectName, selectUserId } from "../store/authSlice";
 import Loading from "../components/loading/LoadingFull";
 import { showNotif } from "../store/notifSlice";
+import { useLocation } from "react-router";
 
 const Friend = ({ friend, setPeople, people }) => {
+  console.log(friend, people);
   return (
     <div
       className={
@@ -51,22 +53,27 @@ const ChatOther = ({ message }) => {
 export default function Chat({ socket }) {
   const username = useSelector(selectName);
   const userId = useSelector(selectUserId);
-  const [people, setPeople] = useState(false); // current show friend or chat
+  const [people, setPeople] = useState(null); // current show friend or chat
   const [ldFriend, setLdFriend] = useState(null);
   const [ldRead, setLdRead] = useState(null);
   const [ldUnrd, setLdUnrd] = useState(null);
-  const [friends, setFriends] = useState([
-    { id: 3, name: "dsad", message: "dsadsad" },
-  ]); // list of friends
-  const [messages, setMessages] = useState(null);
+  const [friends, setFriends] = useState([]); // list of friends
+  const [messages, setMessages] = useState([]);
   const messageRef = useRef(null);
   const dispatch = useDispatch();
+  const { state } = useLocation();
+
+  useEffect(() => {
+    if (state) {
+      setPeople({ friend: state.user.id, name: state.user.name });
+      // setFriends([state.user]);
+    }
+  }, [state]);
 
   socket.onmessage = (e) => {
     const data = JSON.parse(e.data);
-    console.log(data);
     if (data.type !== "Notif") {
-      setMessages((messages) => [...messages, data]);
+      setMessages((prev) => [...prev, data]);
     }
   };
 
@@ -81,7 +88,7 @@ export default function Chat({ socket }) {
         if (!response.ok) {
           throw new Error(data.message);
         }
-        setFriends(data.friends);
+        data.friends?.length > 0 && setFriends((prev) => [...prev, ...data.friends]);
       } catch (error) {
         console.log(error);
         dispatch(
@@ -109,7 +116,8 @@ export default function Chat({ socket }) {
         if (!response.ok) {
           throw new Error(data.message);
         }
-        setMessages(data.messages);
+          data.messages?.length > 0 &&
+          setMessages((prev) => [...prev, ...data.messages]);
       } catch (error) {
         console.log(error);
         dispatch(
@@ -154,7 +162,7 @@ export default function Chat({ socket }) {
   );
 
   useEffect(() => {
-    if (people) {
+    if (people && people.friend) {
       getUnreadChat(people.friend);
     }
   }, [people, getUnreadChat]);
@@ -174,11 +182,13 @@ export default function Chat({ socket }) {
     }
     messageRef.current.value = "";
     messageRef.current.scrollIntoView({ behavior: "smooth" });
-    setMessages((prev) => [
-      ...prev,
-      { id: 32132, from: userId, body: message },
-    ]);
+    setMessages((prev) => [...prev, { from: userId, body: message }]);
   };
+
+  console.log("message :", messages);
+  console.log("fren :", friends);
+  console.log("pople :", people);
+
   return (
     <div className="flex">
       <div className="w-32 vvs:w-36 vs:w-44 xs:w-52 sm:w-60 md:w-72 dark-nav">
@@ -209,8 +219,8 @@ export default function Chat({ socket }) {
         </div>
       </div>
       <div className="flex-grow relative">
-        <div className="bg-d2 py-3.5 w-full flex justify-between items-center">
-          <p className="text-lg ml-3">{people?.name || "salhuddin"}</p>
+        <div className="bg-d2 h-14 w-full flex justify-between items-center">
+          <p className="text-lg ml-3">{people?.name}</p>
         </div>
         <div
           className="relative w-full p-6 overflow-y-auto"
