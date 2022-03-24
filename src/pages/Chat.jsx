@@ -10,40 +10,54 @@ import { useLocation } from "react-router";
 
 const Friend = ({ friend, setPeople, people }) => {
   return (
-    <div
-      className={
-        friend === people
-          ? "flex p-3 hover:bg-d3 cursor-pointer bg-d5"
-          : "flex p-3 hover:bg-d3 cursor-pointer"
-      }
-      onClick={() => setPeople(friend)}
-    >
-      <img src={avatar} alt="avatar" className="w-14" />
-      <div className="ml-2 flex-grow flex flex-col items-start h-full">
-        <div className="text-xl font-bold">{friend.name}</div>
-        <p className="text-sm text-gray-300 chat-truncate">
-          {friend.last_message}
-        </p>
+    <div className="relative">
+      <div
+        className={
+          friend === people
+            ? "flex p-3 hover:bg-d3 cursor-pointer bg-d5"
+            : "flex p-3 hover:bg-d3 cursor-pointer"
+        }
+        onClick={() => setPeople(friend)}
+      >
+        <img
+          src={
+            friend.frn_image
+              ? process.env.REACT_APP_SERVER_URL_IMAGE +
+                "/user/" +
+                friend.frn_image
+              : avatar
+          }
+          alt="avatar"
+          className="w-8 h-8 sm:h-12 sm:w-12 md:h-14 md:w-14 rounded-full"
+        />
+        <div className="ml-2 flex-grow flex flex-col items-start h-full">
+          <div className="text-base sm:text-lg lg:text-xl font-bold truncate">
+            {friend.frn_name}
+          </div>
+          <p className="text-sm text-gray-300 chat-truncate">
+            {friend.message}
+          </p>
+        </div>
+        {friend.notif && <div className="absolute top-1 right-1">notif</div>}
       </div>
-      {friend.notif &&<p>notif</p>}
     </div>
   );
 };
 
-const ChatMe = ({ message }) => {
+const ChatMe = ({id, message }) => {
   return (
     <li className="flex justify-end">
-      <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-gray-200 rounded shadow ml-2">
+      <div id={id} className="relative max-w-xl px-4 py-2 text-gray-700 bg-gray-200 rounded shadow ml-2">
         <span className="block">{message}</span>
       </div>
     </li>
   );
 };
 
-const ChatOther = ({ message }) => {
+const ChatOther = ({id, message }) => {
   return (
     <li className="flex justify-start items-start">
-      <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-sky-300 rounded shadow mr-2">
+      <div id={id} className="relative max-w-xl px-4 py-2 text-gray-700 bg-sky-300 rounded shadow mr-2">
         <span className="block">{message}</span>
       </div>
     </li>
@@ -59,6 +73,7 @@ export default function Chat({ socket }) {
   const [ldUnrd, setLdUnrd] = useState(null);
   const [friends, setFriends] = useState([]); // list of friends
   const [messages, setMessages] = useState([]);
+  const [fokus, setFokus] = useState(null);
   const messageRef = useRef(null);
   const dispatch = useDispatch();
   const { state } = useLocation();
@@ -152,25 +167,30 @@ export default function Chat({ socket }) {
 
   useEffect(() => {
     if (state) {
-      setPeople({ friend: state.user.id, name: state.user.name });
-      // setFriends([state.user]);
+      const friendState = {
+        frn_id: state.user.id,
+        frn_name: state.user.name,
+        frn_image: state.user.image,
+      };
+      setPeople(friendState);
+      setFriends((prev) => [...prev, friendState]);
     }
   }, [state]);
 
   socket.onmessage = (e) => {
     const data = JSON.parse(e.data);
     if (data.type !== "Notif") {
-      setMessages((prev) => [...prev, data]);
       // jika pengirim pesan sama dengan people yang sedang dilihat
       // maka make chat read
       // jika tidak maka tampahkan notif ke frinds jika ada
-      if (data.from === people?.friend) {
+      if (data.from === people?.frn_id) {
+        setMessages((prev) => [...prev, data]);
+        setFokus(data.time);
         makeChatRead(data.from);
       } else {
         let finded = false;
         for (let i = 0; i < friends.length; i++) {
           if (friends[i].friend === data.from) {
-            console.log("ada");
             friends[i].notif = true;
             setFriends([...friends]);
             finded = true;
@@ -178,7 +198,10 @@ export default function Chat({ socket }) {
           }
         }
         if (!finded) {
-          setFriends([{friend: data.from, notif: true, last_message: data.message}, ...friends]);
+          setFriends([
+            { frn_id: data.from, notif: true, message: data.body },
+            ...friends,
+          ]);
         }
       }
     }
@@ -213,8 +236,8 @@ export default function Chat({ socket }) {
   }, [userId, dispatch]);
 
   useEffect(() => {
-    if (people && people.friend) {
-      getUnreadChat(people.friend);
+    if (people && people.frn_id) {
+      getUnreadChat(people.frn_id);
     }
   }, [people, getUnreadChat]);
 
@@ -238,24 +261,33 @@ export default function Chat({ socket }) {
   const sendMessage = (e) => {
     e.preventDefault();
     const message = messageRef.current.value;
-    console.log(userId, people.friend, message);
     if (message) {
       socket.send(
         JSON.stringify({
           body: message,
           from: parseInt(userId),
-          to: parseInt(people.friend),
+          to: parseInt(people.frn_id),
         })
       );
     }
     messageRef.current.value = "";
     messageRef.current.scrollIntoView({ behavior: "smooth" });
-    setMessages((prev) => [...prev, { from: userId, body: message }]);
+    const time = new Date();
+    console.log(time);
+    setMessages((prev) => [...prev, { from: userId, body: message, time }]);
+    setFokus(time);
   };
 
-  console.log("message :", messages);
-  console.log("fren :", friends);
-  console.log("pople :", people);
+  // console.log("message :", messages);
+  // console.log("fren :", friends);
+  // console.log("pople :", people);
+
+  // scrpll to bottom
+  useEffect(() => {
+    fokus && document.getElementById(fokus).scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [fokus]);
 
   return (
     <div className="flex">
@@ -272,7 +304,7 @@ export default function Chat({ socket }) {
             friends && friends.length > 0 ? (
               friends.map((item) => (
                 <Friend
-                  key={item.friend}
+                  key={item.frn_id}
                   friend={item}
                   setPeople={setPeople}
                   people={people}
@@ -286,68 +318,86 @@ export default function Chat({ socket }) {
           )}
         </div>
       </div>
-      <div className="flex-grow relative">
-        <div className="bg-d2 h-14 w-full flex justify-between items-center">
-          <p className="text-lg ml-3">{people?.name}</p>
-        </div>
-        <div
-          className="relative w-full p-6 overflow-y-auto"
-          style={{ height: "82vh" }}
-        >
-          <ul className="space-y-2">
-            {!ldUnrd ? (
-             people && messages && messages.length > 0 ? (
-                <>
-                  <button onClick={() => getReadChat(people.friend)}>
-                    load data lama
-                  </button>
-                  {messages.map((item, index) => {
-                    if (item.from == userId) {
-                      return <ChatMe key={index} message={item.body} />;
-                    } else {
-                      return <ChatOther key={index} message={item.body} />;
-                    }
-                  })}
-                </>
-              ) : (
-                <div className="text-center my-6 w-full">
-                  <h3 className="text-body">
-                    Tidak ada pesan yang belum dibaca
-                  </h3>
-                </div>
-              )
-            ) : (
-              <Loading />
-            )}
-          </ul>
-        </div>
-
-        <div className="absolute bottom-0 w-full bg-d5">
-          <form
-            onSubmit={(e) => sendMessage(e)}
-            className="flex items-center justify-between w-full p-3 border-t-2"
+      {people ? (
+        <div className="flex-grow relative">
+          <div className="bg-d2 h-14 w-full flex justify-between items-center">
+            <p className="text-lg ml-3">{people?.frn_name}</p>
+          </div>
+          <div
+            className="relative w-full p-6 overflow-y-auto"
+            style={{ height: "82vh" }}
           >
-            <input
-              type="text"
-              placeholder="Pesan"
-              ref={messageRef}
-              className="block w-full py-2 px-3 mr-2 outline-none text-gray-50 bg-d3 rounded-full focus:bg-d3"
-              name="message"
-              required
-            />
-            <button type="submit" className="btn-pri rounded-full py-2 px-2.5">
-              <svg
-                className="w-5 h-5 origin-center transform rotate-90"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+            <ul className="space-y-2">
+              {!ldUnrd ? (
+                people && messages && messages.length > 0 ? (
+                  <>
+                    <button onClick={() => getReadChat(people.frn_id)}>
+                      load data lama
+                    </button>
+                    {messages.map( item => {
+                      if (item.from == userId) {
+                        return <ChatMe key={item.time} id={item.time} message={item.body} />;
+                      } else {
+                        return <ChatOther key={item.time} id={item.time} message={item.body} />;
+                      }
+                    })}
+                  </>
+                ) : (
+                  <div className="text-center my-6 w-full">
+                    <h3 className="text-body">
+                      Tidak ada pesan yang belum dibaca
+                    </h3>
+                  </div>
+                )
+              ) : (
+                <Loading />
+              )}
+            </ul>
+          </div>
+
+          <div className="absolute bottom-0 w-full bg-d5">
+            <form
+              onSubmit={(e) => sendMessage(e)}
+              className="flex items-center justify-between w-full p-3 border-t-2"
+            >
+              <input
+                type="text"
+                placeholder="Pesan"
+                ref={messageRef}
+                className="block w-full py-2 px-3 mr-2 outline-none text-gray-50 bg-d3 rounded-full focus:bg-d3"
+                name="message"
+                required
+              />
+              <button
+                type="submit"
+                className="btn-pri rounded-full py-2 px-2.5"
               >
-                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-              </svg>
-            </button>
-          </form>
+                <svg
+                  className="w-5 h-5 origin-center transform rotate-90"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                </svg>
+              </button>
+            </form>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex-grow relative">
+          <div className="bg-d2 h-14 w-full flex justify-between items-center"></div>
+          <div
+            className="flex w-full justify-center items-center"
+            style={{ height: "82vh" }}
+          >
+            <p>
+              Mulai chat denngan memilih teman disamoping atau cari terlebih
+              dahulu
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
