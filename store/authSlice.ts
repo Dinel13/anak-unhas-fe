@@ -6,6 +6,10 @@ export interface authState {
   token: string;
   name: string;
 }
+export interface actionAuth {
+  payload: authState;
+  type: string;
+}
 
 const initialState: authState = {
   id: 0,
@@ -17,7 +21,7 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    login: (state, action) => {
+    login: (state, action: actionAuth) => {
       const {id, token, name } = action.payload;
       localStorage.setItem("mufas_dae4", "_asda+4234"+id+"Dada32_dsa"+token+"e+dadxas"+name)
       state.id = id;
@@ -36,4 +40,5 @@ export const authSlice = createSlice({
 export const { login, logout } = authSlice.actions;
 export const selectName = (state: AppState) => state.auth.name
 export const getToken = (state: AppState) => state.auth.token
+export const selectId = (state: AppState) => state.auth.id
 export default authSlice.reducer;

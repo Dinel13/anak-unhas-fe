@@ -1,3 +1,74 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+   .btn-pri {
+     @apply text-white bg-d2 leading-relaxed focus:outline-none hover:bg-d3 rounded-full transition-colors duration-150;
+   }
+ 
+   .btn-sec {
+     @apply text-gray-200 bg-transparent border border-gray-500 focus:outline-none hover:bg-d3 rounded-full transition-colors duration-150;
+   }
+ 
+   .btn-ter {
+     @apply text-white bg-d1 leading-relaxed focus:outline-none hover:bg-d3 rounded-full transition-colors duration-150;
+   }
+ 
+   .link-scale {
+     @apply transform-gpu transition hover:scale-105 duration-150 ease-in-out;
+   }
+ 
+   .required:after {
+     content: " *";
+     color: red;
+   }
+ 
+   .input-field {
+     @apply w-full px-4 py-2.5 text-gray-50 bg-d3 border border-gray-400 rounded-full focus:bg-d3 active:bg-d3 focus:border-blue-500 focus:outline-none focus:ring;
+   }
+ 
+   .text-title {
+     @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-100;
+   }
+ 
+   .text-subtitle {
+     @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-gray-100;
+   }
+ 
+   .text-subtitle-2 {
+     @apply text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium text-gray-200;
+   }
+ 
+   .text-body {
+     @apply text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-gray-200;
+   }
+ 
+   .wrapper {
+     @apply container mx-auto px-2 sm:px-3 md:px-5 lg:px-7 xl:px-9 py-4 sm:py-6 md:py-9 lg:py-12 xl:py-16;
+   }
+ 
+   .dark-main {
+     @apply text-gray-100 bg-d1;
+   }
+ 
+   .dark-nav {
+     @apply text-gray-100 bg-d2;
+   }
+ 
+   .dark-sidebar {
+     @apply text-gray-100 bg-d3 ;
+   }
+ 
+   .dark-link {
+     @apply text-gray-100 bg-transparent hover:bg-gray-700 focus:outline-none focus:ring;
+   }
+ }
+ 
+ 
+ .chat-truncate {
+   overflow: hidden;
+   display: -webkit-box;
+   -webkit-box-orient: vertical;
+   -webkit-line-clamp: 1;
+ }

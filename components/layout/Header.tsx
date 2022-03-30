@@ -20,9 +20,14 @@ const MainNavigation = () => {
           {name ? (
             <DropdownAccount name={name} />
           ) : (
-            <li className="px-2">
-              <Link href="/auth">Login</Link>
-            </li>
+            <div className="flex items-center text-sm">
+              <Link href="/login">
+                <a className="mr-1.5 p-1.5 link-scale">login</a>
+              </Link>
+              <Link href="/signup">
+                <a className="mr-1.5 p-1.5 link-scale">signup</a>
+              </Link>
+            </div>
           )}
         </ul>
       </nav>

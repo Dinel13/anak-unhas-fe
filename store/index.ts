@@ -1,10 +1,11 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 
 import authReducer from "./authSlice";
+import alertReducer from "./alertSlice";
 
 export function makeStore() {
   return configureStore({
-    reducer: { auth: authReducer },
+    reducer: { auth: authReducer, alert: alertReducer },
   });
 }
 
