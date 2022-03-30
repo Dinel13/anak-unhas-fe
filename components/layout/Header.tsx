@@ -1,15 +1,15 @@
 import Link from "next/link";
-import { FC } from "react";
-import { logout, selectName } from "../../store/authSlice";
-import { DropdownAccount } from "../elements/dropdown";
-import { useDispatch, useSelector } from "react-redux";
+import { FC, useState } from "react";
+import { selectName } from "../../store/authSlice";
+import { useSelector } from "react-redux";
+import MyAccountButton from "./MyAccountButton";
 
-const MainNavigation = () => {
-  const dispatch = useDispatch();
+const Header = ({notif}: {notif:number}) => {
+  const [profile, setProfile] = useState(false);
   const name = useSelector(selectName);
 
   return (
-    <header className="w-full bg-red-900 text-gray-200 px-6 py-4 flex justify-between items-center">
+    <header className="w-full bg-gradient-to-r from-red-900 to-d1  text-gray-200 px-6 py-4 flex justify-between items-center">
       <Link href="/">
         <a>
           <div className="text-2xl font-bold">Anak Unhas</div>
@@ -18,7 +18,9 @@ const MainNavigation = () => {
       <nav>
         <ul className="flex items-center">
           {name ? (
-            <DropdownAccount name={name} />
+            <MyAccountButton profile={profile}
+            setProfile={setProfile}
+            notif={notif} name={name} />
           ) : (
             <div className="flex items-center text-sm">
               <Link href="/login">
@@ -35,4 +37,4 @@ const MainNavigation = () => {
   );
 };
 
-export default MainNavigation;
+export default Header;
