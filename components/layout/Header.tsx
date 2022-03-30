@@ -9,7 +9,7 @@ const MainNavigation = () => {
   const name = useSelector(selectName);
 
   return (
-    <header className="w-full bg-rose-900 text-gray-200 px-6 py-4 flex justify-between items-center">
+    <header className="w-full bg-red-900 text-gray-200 px-6 py-4 flex justify-between items-center">
       <Link href="/">
         <a>
           <div className="text-2xl font-bold">Anak Unhas</div>
