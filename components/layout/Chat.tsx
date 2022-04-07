@@ -19,28 +19,29 @@ interface FriendProps {
   setCrrnFrn: (crrnFrn: Friend) => void;
 }
 
-const Friend:FC<FriendProps> = ({ crrnFrn, setCrrnFrn }) => {
+const Friend: FC<FriendProps> = ({ crrnFrn, setCrrnFrn }) => {
   return (
     <div
       className="flex p-3 hover:bg-d3 cursor-pointer"
       onClick={() => setCrrnFrn(crrnFrn)}
     >
       <div className="relative h-14">
-        <Image src={crrnFrn.frn_image ? crrnFrn.frn_image : "/image/avatar.svg"} alt="avatar" className="rounded-full" layout="fill" />
+        <Image
+          src={crrnFrn.frn_image ? crrnFrn.frn_image : "/image/avatar.svg"}
+          alt="avatar"
+          className="rounded-full"
+          layout="fill"
+        />
       </div>
       <div className="ml-2 flex-grow flex flex-col items-start h-full">
         <div className="text-xl font-bold">{crrnFrn.frn_name}</div>
-        <p className="text-sm text-gray-300 chat-truncate">
-          {crrnFrn.message}
-        </p>
+        <p className="text-sm text-gray-300 chat-truncate">{crrnFrn.message}</p>
       </div>
     </div>
   );
 };
 
-
-
-const ChatMe = ({ message } : {message: string}) => {
+const ChatMe = ({ message }: { message: string }) => {
   console.log("dsadsa", message);
   return (
     <li className="flex justify-end">
@@ -51,7 +52,7 @@ const ChatMe = ({ message } : {message: string}) => {
   );
 };
 
-const ChatOther = ({ message }: {message: string}) => {
+const ChatOther = ({ message }: { message: string }) => {
   console.log("Dsadadsadsadsadsadsa");
   console.log(message);
   return (
@@ -63,34 +64,11 @@ const ChatOther = ({ message }: {message: string}) => {
   );
 };
 
-const friendList = [
-  {
-    id: 1,
-    name: "salahuddin",
-    message: "Dsadsad dasdsadsa dsa",
-  },
-  {
-    id: 2,
-    name: "salan",
-    message: "Dsadsad dasdsadsa dsa",
-  },
-  {
-    id: 3,
-    name: "sauddin",
-    message: "Dsadsad dasdsadsa dsa",
-  },
-  {
-    id: 4,
-    name: "huddin",
-    message: "Dsadsad dasdsadsa dsa",
-  },
-];
-
 interface SendMessage {
   action: string;
   message: string;
   from: number;
-  to: number
+  to: number;
 }
 
 interface Message {
@@ -99,10 +77,10 @@ interface Message {
 }
 
 interface WSFromServer {
-  id? : string;
-  action : string;
+  id?: string;
+  action: string;
   from: number;
-  to?:number
+  to?: number;
   read?: boolean;
   message: string;
   time?: number;
@@ -112,9 +90,9 @@ interface ChatProps {
   socket: WebSocket;
 }
 
-const Chat:FC<ChatProps> = ({socket}) => {
+const Chat: FC<ChatProps> = ({ socket }) => {
   console.log("dsadsa", socket);
-  
+
   const [show, setShow] = useState(false);
   const [friends, setFriends] = useState<Friend[]>([]);
   const [crrnFrn, setCrrnFrn] = useState<Friend | null>(null);
@@ -214,8 +192,6 @@ const Chat:FC<ChatProps> = ({socket}) => {
     [userId]
   );
 
-
-
   socket.onmessage = (e) => {
     const data: WSFromServer = JSON.parse(e.data);
     if (data.action === "chat") {
@@ -223,7 +199,7 @@ const Chat:FC<ChatProps> = ({socket}) => {
       // maka make chat read
       // jika tidak maka tampahkan notif ke frinds jika ada
       if (data.from === crrnFrn?.frn_id) {
-        const newMessage : Message = {
+        const newMessage: Message = {
           message: data.message,
           from: data.from,
         };
@@ -240,7 +216,7 @@ const Chat:FC<ChatProps> = ({socket}) => {
           }
         }
         if (!finded) {
-          const newFriend : Friend = {
+          const newFriend: Friend = {
             frn_id: data.from,
             notif: true,
             message: data.message,
@@ -287,7 +263,7 @@ const Chat:FC<ChatProps> = ({socket}) => {
     }
   }, [crrnFrn, getUnreadChat]);
 
-  const sendMessage = (e: FormEvent<HTMLFormElement> ) => {
+  const sendMessage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (message && crrnFrn) {
       const payload: SendMessage = {
@@ -296,12 +272,13 @@ const Chat:FC<ChatProps> = ({socket}) => {
         from: parseInt(userId),
         to: crrnFrn.frn_id,
       };
-      socket.send(
-        JSON.stringify(payload)
-      );
+      socket.send(JSON.stringify(payload));
     }
     setMessage("");
-    setMessages((prev) => [...prev, { from: parseInt(userId), message, time: Date.now() }]);
+    setMessages((prev) => [
+      ...prev,
+      { from: parseInt(userId), message, time: Date.now() },
+    ]);
   };
 
   return (
@@ -312,17 +289,49 @@ const Chat:FC<ChatProps> = ({socket}) => {
           !show && setShow(true);
         }}
       >
-        {show &&
-          (crrnFrn ? (
-            <>
-              <div className="opacity-5 fixed inset-0 z-20 bg-black "></div>
-              <div className="w-96 absolute rounded-lg right-0 shadow-xl bottom-0 dark-nav z-20">
-                <div className="dark-sidebar w-full flex justify-between items-center px-3 py-2 rounded-t-md ">
-                  <div className="flex items-center">
-                    <button onClick={() => setCrrnFrn(null)}>
+        {show && (
+          <>
+            <div className="opacity-5 fixed inset-0 z-20 bg-black "></div>
+            <div className="w-102 absolute rounded-lg right-0 shadow-xl bottom-0 dark-nav z-20">
+              <div className="flex">
+                <div className="w-36 border-r border-d2 rounded-l-xl">
+                  <div className="flex gap-3 px-2 py-3 bg-d2 rounded-l-xl">
+                    <p>Caht</p>
+                  </div>
+                  <div
+                    className="overflow-y-auto overflow-x-hidden bg-d1"
+                    style={{ height: "70vh"  }}
+                  >
+                    {!ldFriend ? (
+                      friends && friends.length > 0 ? (
+                        friends.map((item) => (
+                          <Friend
+                            key={item.frn_id}
+                            crrnFrn={item}
+                            setCrrnFrn={setCrrnFrn}
+                          />
+                        ))
+                      ) : (
+                        <p className="text-center mt-10">Belum ada temen</p>
+                      )
+                    ) : (
+                      <Loading />
+                    )}
+                  </div>
+                </div>
+                <div className="grow rounded-r-xl">
+                  <div className="flex items-center justify-between bg-d2 rounded-r-xl px-2">
+                    <p>{crrnFrn?.frn_name}</p>
+                    <button
+                      className="py-2 pl-2"
+                      onClick={() => {
+                        setCrrnFrn(null);
+                        setShow(false);
+                      }}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6 mr-1"
+                        className="h-8 w-8"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -331,129 +340,97 @@ const Chat:FC<ChatProps> = ({socket}) => {
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          d="M11 17l-5-5m0 0l5-5m-5 5h12"
+                          d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
                         />
                       </svg>
-                    </button>{" "}
-                    {crrnFrn.frn_name}
-                  </div>
-                  <button
-                    className="py-2 pl-2"
-                    onClick={() => {
-                      setCrrnFrn(null);
-                      setShow(false);
-                    }}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-8 w-8"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <div className="h-96">
-                  <div className="relative w-full p-6 overflow-y-auto h-[20rem]">
-                    <ul className="space-y-2">
-                      {!loading ? (
-                        messages && messages.length > 0 ? (
-                          messages.map((item) => {
-                            if (item.from === crrnFrn.frn_id) {
-                              return <ChatOther message={item.message} />;
-                            } else {
-                              return <ChatMe message={item.message} />;
-                            }
-                          })
-                        ) : (
-                          <div className="text-center my-6 w-full">
-                            <h3 className="text-body">
-                              Tidak ada pesan yang belum dibaca
-                            </h3>
-                          </div>
-                        )
-                      ) : (
-                        <Loading />
-                      )}
-                    </ul>
+                    </button>
                   </div>
 
-                  <form
-                    onSubmit={(e) => sendMessage(e)}
-                    className="flex items-center justify-between w-full p-3 border-t-2 border-gray-500"
-                  >
-                    <input
-                      type="text"
-                      placeholder="Pesan"
-                      className="block w-full py-2 px-3 mr-2 outline-none text-gray-50 bg-d3 rounded-full focus:bg-d3"
-                      name="message"
-                      required
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                    />
-                    <button
-                      type="submit"
-                      className="btn-pri rounded-full py-2 px-2.5"
-                    >
-                      <svg
-                        className="w-5 h-5 origin-center transform rotate-90"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
+                  {crrnFrn ? (
+                    <>
+                      <div
+                        className="relative w-full p-6 overflow-y-auto bg-d1"
+                        style={{ height: "70vh"  }}
                       >
-                        <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-                      </svg>
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="opacity-5 fixed inset-0 z-20 bg-black "></div>
-              <div className="w-96 absolute rounded-lg right-0 shadow-xl bottom-0 dark-nav z-20">
-                <div className="dark-sidebar w-full flex justify-between items-center px-3 py-2 rounded-t-md ">
-                  <div className="flex items-center text-lg">Chat</div>
-                  <button className="py-2 pl-2" onClick={() => setShow(false)}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-8 w-8"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <div className="h-102 overflow-y-auto overflow-x-hidden">
-                  {friends && friends.length > 0 ? (
-                    friends.map((item) => (
-                      <Friend
-                        key={item.frn_id}
-                        crrnFrn={item}
-                        setCrrnFrn={setCrrnFrn}
-                      />
-                    ))
+                        <ul className="space-y-2">
+                          {!ldUnrd ? (
+                            messages && messages.length > 0 ? (
+                              messages.map((item, index) => {
+                                if (item.from === crrnFrn.frn_id) {
+                                  return (
+                                    <ChatOther
+                                      key={index}
+                                      message={item.message}
+                                    />
+                                  );
+                                } else {
+                                  return (
+                                    <ChatMe
+                                      key={index}
+                                      message={item.message}
+                                    />
+                                  );
+                                }
+                              })
+                            ) : (
+                              <div className="text-center my-6 w-full">
+                                <h3 className="text-body">
+                                  Tidak ada pesan yang belum dibaca
+                                </h3>
+                              </div>
+                            )
+                          ) : (
+                            <Loading />
+                          )}
+                        </ul>
+                      </div>
+
+                      <div className="absolute bottom-0 w-full bg-d5">
+                        <form
+                          onSubmit={(e) => sendMessage(e)}
+                          className="flex items-center justify-between w-full p-3 border-t-2"
+                        >
+                          <input
+                            type="text"
+                            placeholder="Pesan"
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                            className="block w-full py-2 px-3 mr-2 outline-none text-gray-50 bg-d3 rounded-full focus:bg-d3"
+                            name="message"
+                            required
+                          />
+                          <button
+                            type="submit"
+                            className="btn-pri rounded-full py-2 px-2.5"
+                          >
+                            <svg
+                              className="w-5 h-5 origin-center transform rotate-90"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                            </svg>
+                          </button>
+                        </form>
+                      </div>
+                    </>
                   ) : (
-                    <p className="text-center mt-10">Tidak ada pesan</p>
+                      <div
+                        className="flex w-full justify-center items-center bg-d1"
+                        style={{ height: "70vh"  }}
+                      >
+                        <p className="text-center text-xl">
+                        Mari memulai obrolan!
+                        </p>
+                      </div>
                   )}
                 </div>
               </div>
-            </>
-          ))}
+            </div>
+          </>
+        )}
+
         <div className="text-white bg-rose-900 focus:outline-none hover:bg-d1 transition-colors duration-150 py-1.5 px-3 cursor-pointer flex items-center text-sm rounded-full border-2 border-sky-300 shadow-lg shadow-red-700 ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -474,7 +451,6 @@ const Chat:FC<ChatProps> = ({socket}) => {
       </div>
     </div>
   );
-}
-
+};
 
 export default Chat;
