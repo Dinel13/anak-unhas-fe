@@ -4,6 +4,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { login, logout, selectId } from "../../store/authSlice";
+import Chat from "./Chat";
 
 function Layout({ children }: { children: ReactChild }) {
   const [notif, setNotif] = useState<number>(0);
@@ -55,12 +56,12 @@ function Layout({ children }: { children: ReactChild }) {
     );
     socket.onopen = () => {
       console.log("connected websocket");
-      setScktStatus("open")
+      setScktStatus("open");
     };
 
     socket.onclose = () => {
       console.log("connection closed");
-      setScktStatus("close")
+      setScktStatus("close");
     };
 
     socket.onerror = (error) => {
@@ -109,6 +110,7 @@ function Layout({ children }: { children: ReactChild }) {
       <main style={{ minHeight: "80vh" }} className="bg-slate-800">
         {children}
       </main>
+      {socket && <Chat socket={socket} />}
       <Footer />
     </Fragment>
   );
