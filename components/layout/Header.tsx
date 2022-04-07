@@ -4,7 +4,12 @@ import { selectName } from "../../store/authSlice";
 import { useSelector } from "react-redux";
 import MyAccountButton from "./MyAccountButton";
 
-const Header = ({notif}: {notif:number}) => {
+interface Iprops {
+  notif: number;
+  closeSckt: () => void;
+}
+
+const Header:FC<Iprops> = ({notif, closeSckt}) => {
   const [profile, setProfile] = useState(false);
   const name = useSelector(selectName);
 
@@ -20,7 +25,7 @@ const Header = ({notif}: {notif:number}) => {
           {name ? (
             <MyAccountButton profile={profile}
             setProfile={setProfile}
-            notif={notif} name={name} />
+            notif={notif} name={name} closeSckt={closeSckt} />
           ) : (
             <div className="flex items-center text-sm">
               <Link href="/login">

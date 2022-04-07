@@ -37,9 +37,9 @@ const Login: FC = () => {
 
       const result = await response.json();
       if (!response.ok) {
-        throw new Error(result.error.message || "Tidak bisa masuk");
+        throw new Error(result.data || "Tidak bisa masuk");
       }
-      dispatch(login(result.user));
+      dispatch(login(result.data));
       router.push("/");
     } catch (error: any) {
       dispatch(
@@ -71,9 +71,9 @@ const Login: FC = () => {
 
       const result = await res.json();
       if (!res.ok) {
-        throw new Error(result.error.message || "Tidak bisa masuk");
+        throw new Error(result.data || "Tidak bisa masuk");
       }
-      dispatch(login(result.user));
+      dispatch(login(result.data));
       router.push("/");
     } catch (error: any) {
       dispatch(

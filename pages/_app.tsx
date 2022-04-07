@@ -6,14 +6,19 @@ import store from "../store";
 import Layout from "../components/layout";
 import "../styles/tailwind.css";
 import Alert from "../components/layout/Alert";
+import ErrorBoundary from "../components/layout/ErrorBoundaries";
 
 function MyApp({ Component, pageProps }: AppProps) {
- return <Provider store={store}>
-      <Alert />
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
-  </Provider>;
+  return (
+    <Provider store={store}>
+      <ErrorBoundary>
+        <Alert />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ErrorBoundary>
+    </Provider>
+  );
 }
 
 export default MyApp;

@@ -7,6 +7,7 @@ interface IProps {
   notif: number;
   profile: boolean;
   setProfile: React.Dispatch<React.SetStateAction<boolean>>;
+  closeSckt: () => void;
 }
 
 const MyAccountButton: React.FC<IProps> = ({
@@ -14,6 +15,7 @@ const MyAccountButton: React.FC<IProps> = ({
   setProfile,
   notif,
   name,
+  closeSckt,
 }) => {
   const dispatch = useDispatch();
   return (
@@ -65,7 +67,10 @@ const MyAccountButton: React.FC<IProps> = ({
                 Cancel
               </button>
               <button
-                onClick={() => dispatch(logout())}
+                onClick={() => {
+                  closeSckt();
+                  dispatch(logout());
+                }}
                 className="flex items-center p-2"
               >
                 <svg

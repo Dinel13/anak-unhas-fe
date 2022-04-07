@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { AppState } from ".";
 
 export interface authState {
-  id: number;
+  id: string;
   token: string;
   name: string;
 }
@@ -12,7 +12,7 @@ export interface actionAuth {
 }
 
 const initialState: authState = {
-  id: 0,
+  id: "",
   token: "",
   name: "",
 };
@@ -23,14 +23,14 @@ export const authSlice = createSlice({
   reducers: {
     login: (state, action: actionAuth) => {
       const {id, token, name } = action.payload;
-      localStorage.setItem("mufas_dae4", "_asda+4234"+id+"Dada32_dsa"+token+"e+dadxas"+name)
+      localStorage.setItem("_ayt-has", id+"e+das"+token+"e+das"+name)
       state.id = id;
       state.token = token;
       state.name = name;
     },
     logout: (state) => {
-      localStorage.removeItem("mufas_dae4");
-      state.id = 0;
+      localStorage.removeItem("_ayt-has");
+      state.id = "";
       state.token = "";
       state.name = "";
     },

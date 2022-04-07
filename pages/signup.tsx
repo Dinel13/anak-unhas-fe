@@ -38,9 +38,9 @@ const Signup: FC = () => {
 
       const result = await response.json();
       if (!response.ok) {
-        throw new Error(result.error.message || "Tidak bisa masuk");
+        throw new Error(result.data || "Tidak bisa masuk");
       }
-      dispatch(login(result.user));
+      dispatch(login(result.data));
       router.push("/");
     } catch (error: any) {
       dispatch(
@@ -71,14 +71,10 @@ const Signup: FC = () => {
       );
 
       const result = await res.json();
-      if (!result.user) {
-        console.log("dsadsad");
-        throw new Error(result.error.message || "Tidak bisa daftar");
-      }
       if (!res.ok) {
-        throw new Error(result.error.message || "Tidak bisa daftar");
+        throw new Error(result.data || "Tidak bisa daftar");
       }
-      dispatch(login(result.user));
+      dispatch(login(result.data));
       router.push("/");
     } catch (error: any) {
       dispatch(
