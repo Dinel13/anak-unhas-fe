@@ -24,6 +24,25 @@ const Header: FC<Iprops> = ({ notif, closeSckt }) => {
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
+    if (key.length < 3) {
+      dispatch(
+        showAlert({
+          status: "Error",
+          message: "Minimal 3 karakter kata kunci",
+        })
+      );
+      return;
+    }
+
+    if (!name) {
+      dispatch(
+        showAlert({
+          status: "Error",
+          message: "Silahkan login terlebih dahulu",
+        })
+      );
+      return;
+    }
     try {
       const result = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/users/search?search=${key}&page=1`,
