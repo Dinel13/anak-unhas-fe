@@ -228,6 +228,7 @@ const Chat: FC<ChatProps> = ({ socket }) => {
       }
     }
   };
+  
   useEffect(() => {
     const getAllFriends = async () => {
       try {
