@@ -26,7 +26,7 @@ const Header: FC<Iprops> = ({ notif, closeSckt }) => {
     e.preventDefault();
     try {
       const result = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/service/search?q=${key}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/search?search=${key}&page=1`,
         {
           method: "GET",
         }

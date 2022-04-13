@@ -292,11 +292,11 @@ const Chat: FC<ChatProps> = ({ socket }) => {
         {show && (
           <>
             <div className="opacity-5 fixed inset-0 z-20 bg-black "></div>
-            <div className="w-102 absolute rounded-lg right-0 shadow-xl bottom-0 dark-nav z-20">
+            <div className="w-80 xs:w-102 absolute rounded-lg right-0 shadow-xl bottom-0 dark-nav z-20">
               <div className="flex">
-                <div className="w-36 border-r border-d2 rounded-l-xl">
+                <div className="w-32 border-r border-d2 rounded-l-xl">
                   <div className="flex gap-3 px-2 py-3 bg-d2 rounded-l-xl">
-                    <p>Caht</p>
+                    <p>Chat</p>
                   </div>
                   <div
                     className="overflow-y-auto overflow-x-hidden bg-d1"
@@ -312,7 +312,7 @@ const Chat: FC<ChatProps> = ({ socket }) => {
                           />
                         ))
                       ) : (
-                        <p className="text-center mt-10">Belum ada temen</p>
+                        <p className="text-center text-sm mt-10">Belum ada temen</p>
                       )
                     ) : (
                       <Loading />
@@ -421,7 +421,7 @@ const Chat: FC<ChatProps> = ({ socket }) => {
                         style={{ height: "70vh"  }}
                       >
                         <p className="text-center text-xl">
-                        Mari memulai obrolan!
+                        Mulai obrolan!
                         </p>
                       </div>
                   )}
