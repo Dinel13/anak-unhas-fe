@@ -110,7 +110,7 @@ function Layout({ children }: { children: ReactChild }) {
       <main style={{ minHeight: "80vh" }} className="bg-slate-800">
         {children}
       </main>
-      {socket && <Chat socket={socket} />}
+      {socket && userId && <Chat socket={socket} />}
       <Footer />
     </Fragment>
   );
