@@ -4,19 +4,19 @@ import Header from "./Header";
 import Footer from "./Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { login, logout, selectId } from "../../store/authSlice";
-import Chat from "./Chat";
+import { useAppContext } from "../../context/state";
 
 function Layout({ children }: { children: ReactChild }) {
   const [notif, setNotif] = useState<number>(0);
-  const [socket, setSocket] = useState<WebSocket | null>(null);
   const [scktStatus, setScktStatus] = useState("");
   const userId = useSelector(selectId);
   const dispatch = useDispatch();
+  const { socket, setSocket, CloseSocket } = useAppContext();
 
-  const CloseSocket = useCallback((sckt) => {
-    console.log("closing socket");
-    sckt?.close();
-  }, []);
+  // const CloseSocket = useCallback((sckt) => {
+  //   console.log("closing socket");
+  //   sckt?.close();
+  // }, []);
 
   const verifyToken = useCallback(
     async (token) => {
@@ -36,18 +36,18 @@ function Layout({ children }: { children: ReactChild }) {
           throw new Error(data.data || "Server sedang bermasalah");
         }
         if (!data.data) {
-          CloseSocket(socket);
+          CloseSocket();
           dispatch(logout());
           localStorage.removeItem("_ayt-has");
         }
         return;
       } catch (error) {
-        CloseSocket(socket);
+        CloseSocket();
         console.log(error);
         dispatch(logout());
       }
     },
-    [dispatch, socket, CloseSocket]
+    [dispatch, CloseSocket]
   );
 
   const connectSocket = useCallback((userId) => {
@@ -102,15 +102,15 @@ function Layout({ children }: { children: ReactChild }) {
     return () => {
       clearTimeout(timeout);
     };
-  }, [userId, connectSocket, socket, scktStatus]);
+  }, [userId, connectSocket, setSocket, socket, scktStatus]);
 
   return (
     <Fragment>
-      <Header notif={notif} closeSckt={() => CloseSocket(socket)} />
+      <Header notif={notif} />
       <main style={{ minHeight: "80vh" }} className="bg-slate-800">
         {children}
       </main>
-      {socket && userId && <Chat socket={socket} />}
+      {/* {socket && userId && <Chat socket={socket} />} */}
       <Footer />
     </Fragment>
   );

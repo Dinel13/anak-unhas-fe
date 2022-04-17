@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useDispatch } from "react-redux";
+import { useAppContext } from "../../context/state";
 import { logout } from "../../store/authSlice";
 
 interface IProps {
@@ -7,7 +8,6 @@ interface IProps {
   notif: number;
   profile: boolean;
   setProfile: React.Dispatch<React.SetStateAction<boolean>>;
-  closeSckt: () => void;
 }
 
 const MyAccountButton: React.FC<IProps> = ({
@@ -15,8 +15,8 @@ const MyAccountButton: React.FC<IProps> = ({
   setProfile,
   notif,
   name,
-  closeSckt,
 }) => {
+  const {CloseSocket} = useAppContext();
   const dispatch = useDispatch();
   return (
     <div className="ml-6 relative">
@@ -68,7 +68,7 @@ const MyAccountButton: React.FC<IProps> = ({
               </button>
               <button
                 onClick={() => {
-                  closeSckt();
+                  CloseSocket();
                   dispatch(logout());
                 }}
                 className="flex items-center p-2"

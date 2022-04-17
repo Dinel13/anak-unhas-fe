@@ -9,10 +9,10 @@ import SideNav from "./SideNav";
 
 interface Iprops {
   notif: number;
-  closeSckt: () => void;
+  // closeSckt: () => void;
 }
 
-const Header: FC<Iprops> = ({ notif, closeSckt }) => {
+const Header: FC<Iprops> = ({ notif }) => {
   const [profile, setProfile] = useState(false);
   const [show, setShow] = useState(false);
   const [key, setKey] = useState("");
@@ -122,7 +122,6 @@ const Header: FC<Iprops> = ({ notif, closeSckt }) => {
                   setProfile={setProfile}
                   notif={notif}
                   name={name}
-                  closeSckt={closeSckt}
                 />
               ) : (
                 <div className="flex items-center text-sm">
