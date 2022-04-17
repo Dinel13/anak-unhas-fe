@@ -6,6 +6,7 @@ import Loading from "../components/common/LoadingButton";
 import { showAlert } from "../store/alertSlice";
 import Friend from "../components/chat/Friend";
 import { ChatMe, ChatOther } from "../components/chat/Chat";
+import { useAppContext } from "../context/state";
 
 export interface Friend {
   frn_id: number;
@@ -37,13 +38,7 @@ interface WSFromServer {
   time?: number;
 }
 
-interface ChatProps {
-  socket: WebSocket;
-}
-
-const Chat: FC<ChatProps> = ({ socket }) => {
-  console.log("dsadsa", socket);
-
+const Chat: FC = () => {
   const [show, setShow] = useState(false);
   const [friends, setFriends] = useState<Friend[]>([]);
   const [crrnFrn, setCrrnFrn] = useState<Friend | null>(null);
@@ -53,6 +48,7 @@ const Chat: FC<ChatProps> = ({ socket }) => {
   const [ldRead, setLdRead] = useState(false);
   const [ldUnrd, setLdUnrd] = useState(false);
   const [ldFriend, setLdFriend] = useState(false);
+  const { socket } = useAppContext();
   const userId = useSelector(selectId);
   const dispatch = useDispatch();
 
@@ -143,7 +139,7 @@ const Chat: FC<ChatProps> = ({ socket }) => {
     [userId]
   );
 
-  socket.onmessage = (e) => {
+  socket.onmessage = (e: MessageEvent<any>) => {
     const data: WSFromServer = JSON.parse(e.data);
     if (data.action === "chat") {
       // jika pengirim pesan sama dengan people yang sedang dilihat
@@ -179,7 +175,7 @@ const Chat: FC<ChatProps> = ({ socket }) => {
       }
     }
   };
-  
+
   useEffect(() => {
     const getAllFriends = async () => {
       try {
@@ -252,7 +248,7 @@ const Chat: FC<ChatProps> = ({ socket }) => {
                   </div>
                   <div
                     className="overflow-y-auto overflow-x-hidden bg-d1"
-                    style={{ height: "70vh"  }}
+                    style={{ height: "70vh" }}
                   >
                     {!ldFriend ? (
                       friends && friends.length > 0 ? (
@@ -264,7 +260,9 @@ const Chat: FC<ChatProps> = ({ socket }) => {
                           />
                         ))
                       ) : (
-                        <p className="text-center text-sm mt-10">Belum ada temen</p>
+                        <p className="text-center text-sm mt-10">
+                          Belum ada temen
+                        </p>
                       )
                     ) : (
                       <Loading />
@@ -302,7 +300,7 @@ const Chat: FC<ChatProps> = ({ socket }) => {
                     <>
                       <div
                         className="relative w-full p-6 overflow-y-auto bg-d1"
-                        style={{ height: "70vh"  }}
+                        style={{ height: "70vh" }}
                       >
                         <ul className="space-y-2">
                           {!ldUnrd ? (
@@ -368,14 +366,12 @@ const Chat: FC<ChatProps> = ({ socket }) => {
                       </div>
                     </>
                   ) : (
-                      <div
-                        className="flex w-full justify-center items-center bg-d1"
-                        style={{ height: "70vh"  }}
-                      >
-                        <p className="text-center text-xl">
-                        Mulai obrolan!
-                        </p>
-                      </div>
+                    <div
+                      className="flex w-full justify-center items-center bg-d1"
+                      style={{ height: "70vh" }}
+                    >
+                      <p className="text-center text-xl">Mulai obrolan!</p>
+                    </div>
                   )}
                 </div>
               </div>

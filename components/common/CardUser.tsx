@@ -16,7 +16,7 @@ export interface IProps {
 }
 
 const CardUser: FC<IProps> = ({ data }) => {
-
+  const router = useRouter();
   return (
     <div className="w-full sm:w-8/12 md:w-6/12 lg:w-4/12 xl:w-3/12">
       <div className="bg-d5 m-3 rounded-lg transition-all duration-300 overflow-hidden shadow-red-900 shadow hover:shadow-xl hover:shadow-red-700">
@@ -24,7 +24,9 @@ const CardUser: FC<IProps> = ({ data }) => {
           <Image
             src={
               data.image
-                ? process.env.NEXT_PUBLIC_SERVER_URL_IMAGE + "/user/" + data.image
+                ? process.env.NEXT_PUBLIC_SERVER_URL_IMAGE +
+                  "/user/" +
+                  data.image
                 : "/u.jpg"
             }
             alt="user"
@@ -46,8 +48,11 @@ const CardUser: FC<IProps> = ({ data }) => {
               </a>
             </Link>
             <button
-              onClick={() =>{}
-                // tampilkan chat
+              onClick={() =>
+                router.push({
+                  pathname: "/chat",
+                  query: { user: JSON.stringify(data) },
+                })
               }
               className="btn-pri py-1 px-5 text-sm"
             >

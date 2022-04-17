@@ -1,4 +1,5 @@
-import { createContext, useCallback, useContext, useState } from 'react';
+import { AppContext } from 'next/app';
+import { createContext, Dispatch, SetStateAction, useCallback, useContext, useState } from 'react';
 
 const AppContext = createContext<any>(null);
 
@@ -13,7 +14,7 @@ export function AppWrapper({ children } : { children: React.ReactNode }) {
 }
 
 export function useAppContext() {
-  const [socket, setSocket] = useContext(AppContext);
+  const [socket, setSocket]: [WebSocket, Dispatch<SetStateAction<WebSocket | null>>] = useContext(AppContext);
 
   const CloseSocket = useCallback(() => {
     socket?.close();
