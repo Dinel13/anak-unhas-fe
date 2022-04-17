@@ -1,4 +1,3 @@
-import { AppContext } from 'next/app';
 import { createContext, Dispatch, SetStateAction, useCallback, useContext, useState } from 'react';
 
 const AppContext = createContext<any>(null);
