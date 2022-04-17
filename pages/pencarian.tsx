@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import CardUser, { User } from "../components/common/CardUser";
+import CardUser, { User } from "../components/user/CardUser";
 import { showAlert } from "../store/alertSlice";
 
 const Fakultas = [

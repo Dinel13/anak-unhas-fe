@@ -3,8 +3,8 @@ import React, { FC } from "react";
 import Image from "next/image"
 import { useRouter } from "next/router";
 
-interface IProps {
-  user: {
+
+export interface User {
     name: string;
     id: number;
     email: string;
@@ -19,6 +19,8 @@ interface IProps {
     ig?: string;
     tertarik?: string;
   };
+interface IProps {
+  user: User
 }
 
 const Akunku: FC<IProps> = ({ user }) => {
@@ -49,7 +51,7 @@ const Akunku: FC<IProps> = ({ user }) => {
         </a>
 
         <div className="mt-2">
-          <h3 className="text-xl leading-none mb-1.5 mt-1 font-semibold">
+          <h3 className="text-xl leading-none mb-1.5 mt-1 font-semibold text-gray-300">
             {user.name}
           </h3>
           <button
