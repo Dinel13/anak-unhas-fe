@@ -1,4 +1,7 @@
 import { FC, FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/router";
+import Image from "next/image";
+import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 
 import { selectId, selectName } from "../store/authSlice";
@@ -7,8 +10,6 @@ import { showAlert } from "../store/alertSlice";
 import Friend from "../components/chat/Friend";
 import { ChatMe, ChatOther } from "../components/chat/Chat";
 import { useAppContext } from "../context/state";
-import Image from "next/image";
-import { useRouter } from "next/router";
 
 export interface Friend {
   frn_id: number;
@@ -74,7 +75,7 @@ const Chat: FC = () => {
           const newMessage: Message = {
             message: data.message,
             from: data.from,
-            time: data.time,
+            time: new Date().toString(),
           };
           setMessages((prev) => [...prev, newMessage]);
           makeChatRead(data.from);
@@ -119,7 +120,6 @@ const Chat: FC = () => {
         data.messages?.length > 0 &&
           setMessages((prev) => [...prev, ...data.messages]);
       } catch (error) {
-        console.log(error);
         dispatch(
           showAlert({
             type: "Error",
@@ -147,7 +147,6 @@ const Chat: FC = () => {
         }
         data.data?.length > 0 ? setMessages(data.data) : getReadChat(friendId);
       } catch (error) {
-        console.log(error);
         dispatch(
           showAlert({
             type: "Error",
@@ -184,7 +183,6 @@ const Chat: FC = () => {
           throw new Error(data.message);
         }
       } catch (error) {
-        console.log(error);
       }
     },
     [userId]
@@ -203,7 +201,6 @@ const Chat: FC = () => {
         }
         data.data?.length > 0 && setFriends(data.data);
       } catch (error) {
-        console.log(error);
         dispatch(
           showAlert({
             type: "Error",
@@ -228,8 +225,6 @@ const Chat: FC = () => {
       });
     }
   }, [userId, dispatch, userQuery]);
-
-  console.log(friends);
 
   useEffect(() => {
     if (crrnFrn) {
@@ -256,7 +251,7 @@ const Chat: FC = () => {
   };
 
   console.log(messages);
-
+  
   return (
     <div className="flex">
       <div className="w-32 vvs:w-36 vs:w-44 xs:w-52 sm:w-60 md:w-72 dark-nav">
@@ -290,7 +285,9 @@ const Chat: FC = () => {
       {crrnFrn ? (
         <div className="flex-grow relative">
           <div className="bg-d2 h-14 w-full flex justify-between items-center">
-            <p className="text-lg text-gray-200 ml-3">{crrnFrn?.frn_name}</p>
+            <Link href={"/user/"+crrnFrn?.frn_id}>
+            <a className="text-lg text-gray-200 ml-3">{crrnFrn?.frn_name}</a>
+            </Link>
           </div>
           <div
             className="relative w-full p-6 overflow-y-auto"

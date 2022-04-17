@@ -54,6 +54,7 @@ const SideNav:FC<IProps> = ({ show, setShow, name }) => {
             </svg>
           </div>
         </div>
+        {name && ( <>
         <Link href="/akunku">
           <a
             onClick={() => setShow(!show)}
@@ -74,6 +75,28 @@ const SideNav:FC<IProps> = ({ show, setShow, name }) => {
             <p className="ml-2">Akun ku</p>
           </a>
         </Link>
+        
+        <Link href="/chat">
+          <a
+            onClick={() => setShow(!show)}
+            className="cursor-pointer p-3 flex items-center hover:text-rose-300 hover:dark-nav"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              fill="none"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" />
+              <circle cx={12} cy={7} r={4} />
+              <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+            </svg>
+            <p className="ml-2">Chat</p>
+          </a>
+        </Link>
+       
         <button
           onClick={() => {
             setShow(!show);
@@ -97,6 +120,8 @@ const SideNav:FC<IProps> = ({ show, setShow, name }) => {
           </svg>
           <p className="ml-2">Logout</p>
         </button>
+        </>
+        )}
         <div className="p-3 fixed bottom-0 left-0 w-64 z-40 border-t-2 border-d4">
           {name ? (
             <div className="w-full flex items-center justify-between">
@@ -120,12 +145,12 @@ const SideNav:FC<IProps> = ({ show, setShow, name }) => {
             </div>
           ) : (
             <div className="flex justify-end" onClick={() => setShow(!show)}>
-              <div className="flex items-center text-sm">
+              <div className="flex items-center">
                 <Link href="/login">
-                  <a className="mr-1.5 p-1.5 link-scale">login</a>
+                  <a className="mr-1.5 p-1.5 link-scale">Login</a>
                 </Link>
                 <Link href="/signup">
-                  <a className="mr-1.5 p-1.5 link-scale">signup</a>
+                  <a className="mr-1.5 p-1.5 link-scale">Signup</a>
                 </Link>
               </div>
             </div>

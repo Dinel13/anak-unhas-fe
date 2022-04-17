@@ -13,11 +13,6 @@ function Layout({ children }: { children: ReactChild }) {
   const dispatch = useDispatch();
   const { socket, setSocket, CloseSocket } = useAppContext();
 
-  // const CloseSocket = useCallback((sckt) => {
-  //   console.log("closing socket");
-  //   sckt?.close();
-  // }, []);
-
   const verifyToken = useCallback(
     async (token) => {
       try {
@@ -43,7 +38,6 @@ function Layout({ children }: { children: ReactChild }) {
         return;
       } catch (error) {
         CloseSocket();
-        console.log(error);
         dispatch(logout());
       }
     },
@@ -65,14 +59,12 @@ function Layout({ children }: { children: ReactChild }) {
     };
 
     socket.onerror = (error) => {
-      console.log("there was an error");
-      console.log(error);
+      console.log("there was an error on socket", error);
     };
 
     socket.onmessage = (e) => {
       const data = JSON.parse(e.data);
       if (data.action === "notif") {
-        console.log("notif", data);
         setNotif(data);
       }
     };
@@ -92,7 +84,6 @@ function Layout({ children }: { children: ReactChild }) {
   useEffect(() => {
     let timeout: NodeJS.Timeout;
     if (userId && !socket) {
-      console.log(userId);
       setSocket(connectSocket(userId));
     } else if (userId && scktStatus === "close") {
       timeout = setTimeout(() => {
