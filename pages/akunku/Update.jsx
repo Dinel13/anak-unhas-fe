@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useRouter } from "next/router";
+
 import { useDispatch, useSelector } from "react-redux";
 
-import { showNotif } from "../../store/notifSlice";
-import PendingButton from "../../components/button/Pending";
-import { selectToken } from "../../store/authSlice";
+import { showAlert } from "../../store/alertSlice";
+import { getToken } from "../../store/authSlice";
+import LoadingButton from "../../components/common/LoadingButton";
 
 export default function Update(props) {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const token = useSelector(selectToken);
+  const token = useSelector(getToken);
   const [user, setUser] = useState({});
   const [pending, setPending] = useState();
-  const { userData } = location.state;
+  const router = useRouter()
+  // const { userData } = location.state;
 
   // get user data from react-router state
-  useEffect(() => {
-    setUser(userData);
-  }, [userData]);
+  // useEffect(() => {
+  //   setUser(userData);
+  // }, [userData]);
 
   // submit form update
   const submitHandler = async (e) => {
@@ -42,17 +42,17 @@ export default function Update(props) {
       }
       setPending(false);
       dispatch(
-        showNotif({
+        showAlert({
           status: "Succes",
           message: "Data berhasil diupdate",
           action: null,
         })
       );
-      setTimeout(() => navigate("/akunku"), 1500);
+      setTimeout(() => router.push("/akunku"), 1500);
     } catch (error) {
       setPending(false);
       dispatch(
-        showNotif({
+        showAlert({
           status: "Error",
           message: error.message,
           action: null,
@@ -232,11 +232,11 @@ export default function Update(props) {
 
           <div className="flex justify-end mt-2">
             {pending ? (
-              <PendingButton />
+              <LoadingButton />
             ) : (
               <>
                 <button
-                  onClick={() => navigate(-1)}
+                  onClick={() => router.back()}
                   className="btn-pri px-6 py-2 text-sm mr-3"
                   type="reset"
                 >

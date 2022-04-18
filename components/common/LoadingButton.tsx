@@ -1,4 +1,6 @@
-export default function LoadingButton() {
+import { FC } from "react";
+
+const LoadingButton:FC = () => {
   return (
     <button
       type="button"
@@ -22,3 +24,5 @@ export default function LoadingButton() {
     </button>
   );
 }
+
+export default LoadingButton;
