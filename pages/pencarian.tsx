@@ -190,9 +190,6 @@ const Filter = ({
 }: {
   setData: Dispatch<SetStateAction<[] | User[]>>;
 }) => {
-  const namaRef = useRef();
-  const angkatanRef = useRef();
-  const fakultasRef = useRef();
   const [filter, setFilter] = useState({
     nama: "",
     angkatan: "",
@@ -200,7 +197,6 @@ const Filter = ({
     jurusan: "",
   });
   const [jurusanList, setJurusanList] = useState<string[] | []>([]);
-  const jurusanRef = useRef();
   const dispatch = useDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -239,7 +235,7 @@ const Filter = ({
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            nama: filter.nama,
+            name: filter.nama,
             angkatan: filter.angkatan,
             fakultas: filter.fakultas,
             jurusan: filter.jurusan,
@@ -251,14 +247,15 @@ const Filter = ({
       if (!result.ok) {
         throw new Error(data.message || "gagal mendapat layanan");
       }
-      if (data && data.length > 0) {
-        setData(data.data);
+      if (data && data.data.users.length > 0) {
+        setData(data.data.users);
         setFilter({
           nama: "",
           angkatan: "",
           fakultas: "",
           jurusan: "",
         });
+        setJurusanList([]);
       }
     } catch (error: any) {
       dispatch(
@@ -311,7 +308,7 @@ const Filter = ({
             />
           </div>
         </div>
-        <div className="flex flex-wrap w-full mt-2">
+        <div className="flex flex-wrap w-full mt-2 text-gray-200">
           <div className="w-full vs:w-1/2 flex flex-col vs:pr-3 sm:pr-6">
             <label
               htmlFor="pendidikan"
@@ -319,10 +316,31 @@ const Filter = ({
             >
               Fakultas
             </label>
-            <input
+            {/* <input
               list="fakultases"
               className="p-2.5 flex-1 bg-gray-300 outline-none rounded-md shadow-lg focus:ring focus:ring-d4 text-gray-700"
               //   className="block input-field my-0 px-2 py-2.5"
+              placeholder="Teknik"
+              name="fakultas"
+              value={filter.fakultas}
+              onChange={(e) => {
+                handleChange(e);
+                Fakultas.forEach((item) => {
+                  if (item.nama === e.target.value) {
+                    setJurusanList(item.jurusan);
+                  }
+                });
+              }}
+            />
+            <datalist id="fakultases">
+              {Fakultas.map((item) => (
+                <option key={item.id} value={item.nama} />
+              ))}
+            </datalist> */}
+            <input
+              type="text"
+              list="fakultases"
+              className="p-2.5 flex-1 bg-gray-300 outline-none rounded-md shadow-lg focus:ring focus:ring-d4 text-gray-700"
               placeholder="Teknik"
               name="fakultas"
               value={filter.fakultas}
@@ -348,12 +366,26 @@ const Filter = ({
             >
               Jurusan
             </label>
-            <input
+            {/* <input
               list="jurusans"
               name="jurusan"
               onChange={handleChange}
               className="p-2.5 flex-1 bg-gray-300 outline-none rounded-md shadow-lg focus:ring focus:ring-d4 text-gray-700"
               //   className="block input-field my-0 px-2 py-2.5"
+              placeholder="Teknik Informatika"
+            />
+            <datalist id="jurusans">
+              {jurusanList?.map((item, index) => (
+                <option key={index} value={item} />
+              ))}
+            </datalist> */}
+            <input
+              type="text"
+              list="jurusans"
+              name="jurusan"
+              className="p-2.5 flex-1 bg-gray-300 outline-none rounded-md shadow-lg focus:ring focus:ring-d4 text-gray-700"
+              value={filter.jurusan}
+              onChange={handleChange}
               placeholder="Teknik Informatika"
             />
             <datalist id="jurusans">
@@ -391,13 +423,13 @@ function Pencarian() {
   const [data, setData] = useState<User[] | []>([]);
   const [total, setTotal] = useState();
   const router = useRouter();
-  const dataQuery = router.query.data? router.query.data+"" : undefined;
+  const dataQuery = router.query.data ? router.query.data + "" : undefined;
 
   useEffect(() => {
     if (dataQuery) {
       const dataJs = JSON.parse(dataQuery);
       console.log(dataJs.data);
-      
+
       setData(dataJs.data.users);
       console.log(dataJs.data.users);
       setTotal(dataJs.data.total);
