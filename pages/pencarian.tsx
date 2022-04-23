@@ -404,9 +404,6 @@ function Pencarian() {
     }
   }, [dataQuery]);
 
-  console.log(data);
-  
-
   return (
     <>
       <section className="container my-0 mx-auto px-1 sm:px-2 md:px-3 lg:px-4 xl:px-6 2xl:px-8 py-4 md:py-6 lg:py-8 xl:py-10 2xl:py-12">

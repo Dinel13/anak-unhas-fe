@@ -102,7 +102,7 @@ export default function MyAccount() {
             </div>
 
             <div className="mt-2">
-              <h3 className="text-xl leading-none mb-1.5 mt-1 font-semibold">
+              <h3 className="text-xl leading-none mb-1.5 mt-1 font-semibold text-gray-100">
                 {user.name}
               </h3>
               <div className="flex gap-2 mt-4">
@@ -126,7 +126,7 @@ export default function MyAccount() {
               </div>
             </div>
           </div>
-          <div className="border-t border-gray-300 mt-5 max-w-6xl">
+          <div className="border-t border-gray-300 text-gray-100 mt-5 max-w-6xl">
             <dl>
               <div className="px-4 py-5 sm:grid xs:grid-cols-3 md:grid-cols-4 sm:gap-4 sm:px-6">
                 <dt className="text-sm text-gray-300">Fakultas</dt>

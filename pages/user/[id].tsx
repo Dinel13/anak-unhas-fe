@@ -50,8 +50,8 @@ const Akunku: FC<IProps> = ({ user }) => {
           />
         </a>
 
-        <div className="mt-2">
-          <h3 className="text-xl leading-none mb-1.5 mt-1 font-semibold text-gray-300">
+        <div className="mt-2 ml-4">
+          <h3 className="text-xl leading-none mb-1.5 mt-1 font-semibold text-gray-100">
             {user.name}
           </h3>
           <button
@@ -67,7 +67,7 @@ const Akunku: FC<IProps> = ({ user }) => {
             </button>
         </div>
       </div>
-      <div className="border-t border-gray-300 mt-8 max-w-6xl">
+      <div className="border-t border-gray-300 mt-8 max-w-6xl text-gray-100">
         <dl>
           <div className="px-4 py-5 sm:grid xs:grid-cols-3 md:grid-cols-4 sm:gap-4 sm:px-6">
             <dt className="text-sm text-gray-300">Fakultas</dt>
