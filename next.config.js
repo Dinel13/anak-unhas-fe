@@ -4,6 +4,7 @@ const nextConfig = {
   images: {
     domains: ['localhost'],
   },
+  target: 'serverless', // add this line
 }
 
 module.exports = nextConfig
