@@ -5,6 +5,7 @@ import Footer from "./Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { login, logout, selectId } from "../../store/authSlice";
 import { useAppContext } from "../../context/state";
+import { useRouter } from "next/router";
 
 function Layout({ children }: { children: ReactChild }) {
   const [notif, setNotif] = useState<number>(0);
@@ -12,6 +13,8 @@ function Layout({ children }: { children: ReactChild }) {
   const userId = useSelector(selectId);
   const dispatch = useDispatch();
   const { socket, setSocket, CloseSocket } = useAppContext();
+  const router = useRouter();
+  const currentPath = router.pathname;
 
   const verifyToken = useCallback(
     async (token) => {
@@ -102,7 +105,7 @@ function Layout({ children }: { children: ReactChild }) {
         {children}
       </main>
       {/* {socket && userId && <Chat socket={socket} />} */}
-      <Footer />
+     {currentPath !== "/chat" && <Footer />}
     </Fragment>
   );
 }

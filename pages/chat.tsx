@@ -62,7 +62,8 @@ const Chat: FC = () => {
   const userName = useSelector(selectName);
   const dispatch = useDispatch();
   const router = useRouter();
-  const userQuery = router.query.user ? router.query.user+"" : undefined;
+  const userQuery = router.query.user ? router.query.user + "" : undefined;
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   if (socket) {
     socket.onmessage = (e: MessageEvent<any>) => {
@@ -77,8 +78,8 @@ const Chat: FC = () => {
             from: data.from,
             time: new Date().toString(),
           };
-          setMessages((prev) => [...prev, newMessage]);
-          makeChatRead(data.from);
+          setMessages([...messages, newMessage]);
+          // makeChatRead(data.from);
         } else {
           let finded = false;
           for (let i = 0; i < friends.length; i++) {
@@ -182,11 +183,16 @@ const Chat: FC = () => {
         if (!response.ok) {
           throw new Error(data.message);
         }
-      } catch (error) {
-      }
+      } catch (error) {}
     },
     [userId]
   );
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(scrollToBottom, [messages]);
 
   useEffect(() => {
     const getAllFriends = async () => {
@@ -244,14 +250,12 @@ const Chat: FC = () => {
       socket.send(JSON.stringify(payload));
     }
     setMessage("");
-    setMessages((prev) => [
-      ...prev,
+    setMessages([
+      ...messages,
       { from: parseInt(userId), message, time: Date.now().toString() },
     ]);
   };
 
-  console.log(messages);
-  
   return (
     <div className="flex">
       <div className="w-32 vvs:w-36 vs:w-44 xs:w-52 sm:w-60 md:w-72 dark-nav">
@@ -285,12 +289,12 @@ const Chat: FC = () => {
       {crrnFrn ? (
         <div className="flex-grow relative">
           <div className="bg-d2 h-14 w-full flex justify-between items-center">
-            <Link href={"/user/"+crrnFrn?.frn_id}>
-            <a className="text-lg text-gray-200 ml-3">{crrnFrn?.frn_name}</a>
+            <Link href={"/user/" + crrnFrn?.frn_id}>
+              <a className="text-lg text-gray-200 ml-3">{crrnFrn?.frn_name}</a>
             </Link>
           </div>
           <div
-            className="relative w-full p-6 overflow-y-auto"
+            className="relative w-full p-6 overflow-y-auto mb-3"
             style={{ height: "82vh" }}
           >
             <ul className="space-y-2">
@@ -315,13 +319,13 @@ const Chat: FC = () => {
               ) : (
                 <Loading />
               )}
+              <div ref={messagesEndRef} className="mt-20 mb-10 block">d</div>
             </ul>
           </div>
-
           <div className="absolute bottom-0 w-full bg-d5">
             <form
               onSubmit={(e) => sendMessage(e)}
-              className="flex items-center justify-between w-full p-3 border-t-2"
+              className="flex items-center justify-between w-full p-3"
             >
               <input
                 type="text"
