@@ -2,9 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['localhost'],
+    domains: ['localhost', 'lanjukang.tech'],
   },
-  target: 'serverless', // add this line
+  // target: 'serverless', // add this line for netlify
 }
 
 module.exports = nextConfig

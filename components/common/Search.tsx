@@ -23,7 +23,7 @@ const Search: FC = () => {
     }
     try {
       const result = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/users/search?search=${search}&page=1`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/search?search=${search}&page=1`,
         {
           method: "GET",
         }
@@ -32,7 +32,10 @@ const Search: FC = () => {
       if (!result.ok) {
         throw new Error(data.message || "gagal mencari data");
       }
-      router.push({pathname: "/pencarian", query: {data : JSON.stringify(data)}});
+      router.push({
+        pathname: "/pencarian",
+        query: { data: JSON.stringify(data) },
+      });
     } catch (error: any) {
       dispatch(
         showAlert({

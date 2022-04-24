@@ -428,10 +428,7 @@ function Pencarian() {
   useEffect(() => {
     if (dataQuery) {
       const dataJs = JSON.parse(dataQuery);
-      console.log(dataJs.data);
-
       setData(dataJs.data.users);
-      console.log(dataJs.data.users);
       setTotal(dataJs.data.total);
     }
   }, [dataQuery]);
