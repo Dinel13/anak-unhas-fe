@@ -319,7 +319,7 @@ const Chat: FC = () => {
               ) : (
                 <Loading />
               )}
-              <div ref={messagesEndRef} className="mt-20 mb-10 block">d</div>
+              <div ref={messagesEndRef} className="mt-20 mb-10 block text-slate-800">d</div>
             </ul>
           </div>
           <div className="absolute bottom-0 w-full bg-d5">
